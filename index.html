@@ -1,0 +1,2744 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>AI Universe — OmniSolve AI · Powered by GPT-4o, Qwen &amp; DeepSeek, Free</title>
+<link href="https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@500;600;700&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/mathjs/12.4.2/math.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/nerdamer@1.1.13/all.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/tesseract.js@5/dist/tesseract.min.js"></script>
+<style>/* ============================================================
+   AI UNIVERSE — Design System
+   Display: Space Grotesk · Body: Inter · Mono: JetBrains Mono
+   ============================================================ */
+
+:root{
+  /* Dark (default) */
+  --bg:#0a0c16;
+  --bg-soft:#0f1220;
+  --surface:#141829;
+  --surface-2:#1b2036;
+  --border:rgba(255,255,255,0.08);
+  --border-strong:rgba(255,255,255,0.14);
+  --text:#eef0fb;
+  --text-dim:#a7acc8;
+  --text-faint:#6c7195;
+
+  --violet:#7c5cff;
+  --cyan:#00e0c6;
+  --amber:#ffb23f;
+  --coral:#ff6b5b;
+  --green:#3ddc97;
+
+  --grad-main: linear-gradient(120deg,#7c5cff 0%, #00b8ff 50%, #00e0c6 100%);
+  --grad-warm: linear-gradient(120deg,#ff6b5b 0%, #ffb23f 100%);
+  --grad-card: linear-gradient(160deg, rgba(124,92,255,0.14), rgba(0,224,198,0.06));
+
+  --shadow-glow: 0 0 0 1px rgba(124,92,255,0.15), 0 20px 60px -20px rgba(124,92,255,0.35);
+  --radius-lg:22px;
+  --radius-md:16px;
+  --radius-sm:10px;
+  --font-display:'Space Grotesk', sans-serif;
+  --font-body:'Inter', sans-serif;
+  --font-mono:'JetBrains Mono', monospace;
+}
+
+[data-theme="light"]{
+  --bg:#f6f7fc;
+  --bg-soft:#ffffff;
+  --surface:#ffffff;
+  --surface-2:#eef0fb;
+  --border:rgba(20,22,40,0.08);
+  --border-strong:rgba(20,22,40,0.14);
+  --text:#10122a;
+  --text-dim:#4d5078;
+  --text-faint:#888cab;
+  --shadow-glow: 0 0 0 1px rgba(124,92,255,0.10), 0 20px 50px -25px rgba(124,92,255,0.25);
+}
+
+*{box-sizing:border-box;}
+html{scroll-behavior:smooth;}
+body{
+  margin:0;
+  background:var(--bg);
+  color:var(--text);
+  font-family:var(--font-body);
+  -webkit-font-smoothing:antialiased;
+  transition:background .35s ease,color .35s ease;
+  overflow-x:hidden;
+}
+img{max-width:100%;}
+a{color:inherit;text-decoration:none;}
+h1,h2,h3,h4{font-family:var(--font-display);margin:0;letter-spacing:-0.01em;}
+p{margin:0;line-height:1.6;}
+ul{margin:0;padding:0;}
+button{font-family:var(--font-body);cursor:pointer;}
+::selection{background:var(--violet);color:#fff;}
+
+.container{max-width:1240px;margin:0 auto;padding:0 24px;}
+.eyebrow{
+  font-family:var(--font-mono);
+  font-size:12px;
+  letter-spacing:0.12em;
+  text-transform:uppercase;
+  color:var(--cyan);
+  display:flex;align-items:center;gap:8px;
+}
+.eyebrow::before{content:'';width:6px;height:6px;border-radius:50%;background:var(--cyan);box-shadow:0 0 12px var(--cyan);}
+
+.grad-text{
+  background:var(--grad-main);
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+}
+
+/* ---------- buttons ---------- */
+.btn{
+  display:inline-flex;align-items:center;justify-content:center;gap:8px;
+  font-weight:600;font-size:15px;font-family:var(--font-body);
+  padding:13px 26px;border-radius:999px;border:1px solid transparent;
+  transition:transform .25s ease, box-shadow .25s ease, background .25s ease, color .25s ease, border-color .25s ease;
+  white-space:nowrap;
+}
+.btn-primary{
+  background:var(--grad-main); color:#08091a;
+  box-shadow:0 12px 30px -10px rgba(124,92,255,0.6);
+}
+.btn-primary:hover{transform:translateY(-2px);box-shadow:0 16px 36px -8px rgba(124,92,255,0.7);}
+.btn-ghost{
+  background:transparent;border:1px solid var(--border-strong);color:var(--text);
+}
+.btn-ghost:hover{border-color:var(--cyan);color:var(--cyan);transform:translateY(-2px);}
+.btn-sm{padding:9px 18px;font-size:13px;}
+.btn-block{width:100%;}
+.btn[disabled]{opacity:0.5;cursor:not-allowed;transform:none !important;}
+
+/* ---------- nav ---------- */
+.nav{
+  position:sticky;top:0;z-index:100;
+  backdrop-filter:blur(16px);
+  background:color-mix(in srgb, var(--bg) 75%, transparent);
+  border-bottom:1px solid var(--border);
+}
+.nav-inner{display:flex;align-items:center;justify-content:space-between;height:74px;gap:24px;}
+.logo{display:flex;align-items:center;gap:10px;font-family:var(--font-display);font-weight:700;font-size:19px;}
+.logo-mark{
+  width:34px;height:34px;border-radius:10px;background:var(--grad-main);
+  display:flex;align-items:center;justify-content:center;font-size:16px;color:#08091a;flex:none;
+  box-shadow:0 6px 16px -4px rgba(124,92,255,0.6);
+}
+.nav-links{display:flex;align-items:center;gap:28px;font-size:14.5px;font-weight:500;color:var(--text-dim);}
+.nav-links a{transition:color .2s;white-space:nowrap;}
+.nav-links a:hover, .nav-links a.active{color:var(--text);}
+.nav-right{display:flex;align-items:center;gap:12px;flex:none;}
+.icon-btn{
+  width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;
+  border:1px solid var(--border);background:var(--surface);font-size:16px;transition:.2s;
+}
+.icon-btn:hover{border-color:var(--violet);}
+.nav-burger{display:none;}
+
+@media (max-width:900px){
+  .nav-links{display:none;}
+  .nav-burger{display:flex;}
+}
+
+/* ---------- mobile drawer ---------- */
+.mobile-drawer{
+  position:fixed;inset:0;z-index:200;background:color-mix(in srgb, var(--bg) 96%, transparent);
+  backdrop-filter:blur(10px);
+  display:flex;flex-direction:column;padding:24px;gap:6px;
+  transform:translateX(100%);transition:transform .35s ease;
+}
+.mobile-drawer.open{transform:translateX(0);}
+.mobile-drawer a{padding:16px 6px;font-size:18px;font-weight:600;border-bottom:1px solid var(--border);}
+.mobile-drawer-close{align-self:flex-end;}
+
+/* ---------- footer ---------- */
+.footer{border-top:1px solid var(--border);padding:60px 0 30px;margin-top:80px;color:var(--text-dim);}
+.footer-grid{display:grid;grid-template-columns:1.4fr 1fr 1fr 1fr;gap:32px;}
+.footer h4{font-size:13px;color:var(--text);margin-bottom:14px;}
+.footer ul{display:flex;flex-direction:column;gap:10px;font-size:14px;}
+.footer ul a:hover{color:var(--cyan);}
+.footer-bottom{margin-top:50px;padding-top:24px;border-top:1px solid var(--border);display:flex;justify-content:space-between;font-size:13px;flex-wrap:wrap;gap:10px;}
+@media (max-width:760px){.footer-grid{grid-template-columns:1fr 1fr;}}
+
+/* ---------- section helpers ---------- */
+.section{padding:80px 0;}
+.section-head{display:flex;align-items:flex-end;justify-content:space-between;margin-bottom:36px;gap:20px;flex-wrap:wrap;}
+.section-title{font-size:clamp(26px,3vw,36px);font-weight:700;}
+.section-sub{color:var(--text-dim);font-size:15px;margin-top:8px;max-width:540px;}
+.see-all{font-size:14px;font-weight:600;color:var(--violet);display:flex;align-items:center;gap:6px;}
+
+/* ---------- badges ---------- */
+.badge{
+  font-family:var(--font-mono);font-size:11px;font-weight:600;letter-spacing:.03em;
+  padding:4px 10px;border-radius:999px;display:inline-flex;align-items:center;gap:5px;
+}
+.badge-free{background:rgba(61,220,151,0.14);color:var(--green);}
+.badge-freemium{background:rgba(255,178,63,0.14);color:var(--amber);}
+.badge-paid{background:rgba(255,107,91,0.14);color:var(--coral);}
+.badge-new{background:rgba(124,92,255,0.16);color:var(--violet);}
+.badge-trend{background:rgba(0,224,198,0.14);color:var(--cyan);}
+
+/* ---------- tool card ---------- */
+.tool-card{
+  background:var(--surface);
+  border:1px solid var(--border);
+  border-radius:var(--radius-md);
+  padding:22px;
+  display:flex;flex-direction:column;gap:14px;
+  transition:transform .3s ease, box-shadow .3s ease, border-color .3s ease;
+  position:relative;
+  overflow:hidden;
+}
+.tool-card::before{
+  content:'';position:absolute;inset:0;background:var(--grad-card);opacity:0;transition:opacity .3s ease;pointer-events:none;
+}
+.tool-card:hover{transform:translateY(-4px);border-color:var(--border-strong);box-shadow:var(--shadow-glow);}
+.tool-card:hover::before{opacity:1;}
+.tool-card-top{display:flex;align-items:flex-start;justify-content:space-between;gap:10px;position:relative;z-index:1;}
+.tool-logo{
+  width:50px;height:50px;border-radius:14px;display:flex;align-items:center;justify-content:center;
+  font-size:22px;flex:none;font-family:var(--font-display);font-weight:700;
+}
+.tool-fav{background:none;border:none;color:var(--text-faint);font-size:18px;padding:4px;}
+.tool-fav.active{color:var(--coral);}
+.tool-name{font-size:17px;font-weight:700;margin:2px 0 2px;}
+.tool-maker{font-size:12px;color:var(--text-faint);}
+.tool-desc{font-size:13.5px;color:var(--text-dim);line-height:1.55;position:relative;z-index:1;}
+.tool-meta{display:flex;align-items:center;gap:10px;flex-wrap:wrap;position:relative;z-index:1;}
+.tool-rating{display:flex;align-items:center;gap:4px;font-family:var(--font-mono);font-size:12.5px;color:var(--amber);}
+.tool-cat-pill{font-size:11.5px;color:var(--text-faint);background:var(--surface-2);padding:3px 9px;border-radius:999px;}
+.tool-tags{display:flex;flex-wrap:wrap;gap:6px;position:relative;z-index:1;}
+.tool-tag{font-size:11px;color:var(--text-dim);border:1px solid var(--border);padding:3px 8px;border-radius:7px;}
+.tool-card-foot{display:flex;align-items:center;justify-content:space-between;gap:10px;margin-top:auto;position:relative;z-index:1;}
+
+.grid-3{display:grid;grid-template-columns:repeat(3,1fr);gap:22px;}
+.grid-4{display:grid;grid-template-columns:repeat(4,1fr);gap:20px;}
+@media (max-width:1080px){.grid-3{grid-template-columns:repeat(2,1fr);} .grid-4{grid-template-columns:repeat(2,1fr);}}
+@media (max-width:620px){.grid-3{grid-template-columns:1fr;} .grid-4{grid-template-columns:1fr;}}
+
+/* horizontal scroller */
+.hscroll{display:flex;gap:20px;overflow-x:auto;padding-bottom:8px;scroll-snap-type:x mandatory;}
+.hscroll::-webkit-scrollbar{height:6px;}
+.hscroll::-webkit-scrollbar-thumb{background:var(--border-strong);border-radius:4px;}
+.hscroll > *{scroll-snap-align:start;flex:0 0 290px;}
+
+/* ---------- chips / filters ---------- */
+.chip-row{display:flex;gap:10px;flex-wrap:wrap;}
+.chip{
+  font-size:13.5px;font-weight:600;padding:9px 16px;border-radius:999px;
+  border:1px solid var(--border);background:var(--surface);color:var(--text-dim);
+  transition:.2s;white-space:nowrap;
+}
+.chip:hover{border-color:var(--violet);color:var(--text);}
+.chip.active{background:var(--grad-main);color:#08091a;border-color:transparent;}
+
+/* ---------- form controls ---------- */
+.input, select.input{
+  width:100%;background:var(--surface);border:1px solid var(--border);color:var(--text);
+  padding:13px 16px;border-radius:var(--radius-sm);font-size:14.5px;font-family:var(--font-body);
+  transition:border-color .2s;
+}
+.input:focus, select.input:focus{outline:none;border-color:var(--violet);}
+.search-wrap{position:relative;}
+.search-wrap .input{padding-left:44px;}
+.search-icon{position:absolute;left:16px;top:50%;transform:translateY(-50%);color:var(--text-faint);}
+
+/* ---------- card / panel ---------- */
+.panel{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:28px;}
+
+/* utility */
+.flex{display:flex;}
+.flex-col{display:flex;flex-direction:column;}
+.items-center{align-items:center;}
+.justify-between{justify-content:space-between;}
+.gap-8{gap:8px;} .gap-12{gap:12px;} .gap-16{gap:16px;} .gap-20{gap:20px;} .gap-24{gap:24px;}
+.mt-8{margin-top:8px;} .mt-16{margin-top:16px;} .mt-24{margin-top:24px;} .mt-40{margin-top:40px;}
+.text-dim{color:var(--text-dim);}
+.text-faint{color:var(--text-faint);}
+.text-center{text-align:center;}
+.hidden{display:none !important;}
+.w-full{width:100%;}
+
+@media (prefers-reduced-motion: reduce){
+  *{animation-duration:0.01ms !important; transition-duration:0.01ms !important;}
+}
+
+@media (max-width:760px){
+  .section{padding:56px 0;}
+}
+
+/* ===================== HERO ===================== */
+.hero{position:relative;padding:90px 0 70px;overflow:hidden;}
+.hero-canvas-wrap{position:absolute;inset:0;z-index:0;opacity:0.9;}
+.hero-canvas-wrap canvas{display:block;}
+.hero-fade{position:absolute;inset:0;background:radial-gradient(60% 50% at 50% 30%, transparent, var(--bg) 85%);z-index:1;pointer-events:none;}
+.hero-content{position:relative;z-index:2;text-align:center;max-width:780px;margin:0 auto;}
+.hero-title{font-size:clamp(38px,6.4vw,68px);font-weight:700;line-height:1.05;margin-top:22px;}
+.hero-sub{font-size:clamp(16px,2vw,19px);color:var(--text-dim);margin:22px auto 0;max-width:560px;}
+.hero-actions{display:flex;gap:14px;justify-content:center;margin-top:34px;flex-wrap:wrap;}
+.hero-stats{display:flex;justify-content:center;gap:48px;margin-top:56px;flex-wrap:wrap;}
+.hero-stat-num{font-family:var(--font-display);font-size:28px;font-weight:700;}
+.hero-stat-label{font-size:12.5px;color:var(--text-faint);text-transform:uppercase;letter-spacing:.05em;}
+
+/* ===================== CATEGORY TILES ===================== */
+.cat-tile{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);
+  padding:24px;display:flex;flex-direction:column;gap:10px;transition:.25s;
+}
+.cat-tile:hover{transform:translateY(-3px);border-color:var(--violet);}
+.cat-icon{font-size:26px;}
+.cat-tile .cat-name{font-weight:700;font-size:16px;}
+.cat-tile .cat-count{font-size:12.5px;color:var(--text-faint);}
+
+/* ===================== PAGE HEADER BAND ===================== */
+.page-band{padding:64px 0 36px;border-bottom:1px solid var(--border);}
+.page-band .eyebrow{margin-bottom:14px;}
+.page-band h1{font-size:clamp(30px,4vw,46px);}
+.page-band p{color:var(--text-dim);max-width:600px;margin-top:14px;font-size:15.5px;}
+
+/* ===================== DIRECTORY ===================== */
+.directory-layout{display:grid;grid-template-columns:260px 1fr;gap:36px;align-items:flex-start;}
+.filters-panel{position:sticky;top:94px;}
+.filter-group{margin-bottom:26px;}
+.filter-group h4{font-size:12.5px;text-transform:uppercase;letter-spacing:.06em;color:var(--text-faint);margin-bottom:12px;}
+.filter-list{display:flex;flex-direction:column;gap:10px;font-size:14px;color:var(--text-dim);}
+.filter-list label{display:flex;align-items:center;gap:9px;cursor:pointer;}
+.results-top{display:flex;justify-content:space-between;align-items:center;margin-bottom:22px;flex-wrap:wrap;gap:14px;}
+.sort-select{width:auto;min-width:170px;}
+@media (max-width:920px){
+  .directory-layout{grid-template-columns:1fr;}
+  .filters-panel{position:static;}
+}
+
+/* ===================== TOOL DETAIL ===================== */
+.tool-hero{display:flex;gap:24px;align-items:flex-start;flex-wrap:wrap;}
+.tool-hero-logo{width:84px;height:84px;border-radius:20px;display:flex;align-items:center;justify-content:center;font-size:38px;flex:none;}
+.detail-grid{display:grid;grid-template-columns:2fr 1fr;gap:32px;margin-top:40px;}
+@media (max-width:920px){.detail-grid{grid-template-columns:1fr;}}
+.feature-list li, .pros-list li, .cons-list li{
+  display:flex;gap:10px;padding:10px 0;border-bottom:1px solid var(--border);font-size:14.5px;color:var(--text-dim);
+}
+.feature-list li:last-child, .pros-list li:last-child, .cons-list li:last-child{border-bottom:none;}
+.pros-list li::before{content:'+';color:var(--green);font-weight:700;}
+.cons-list li::before{content:'–';color:var(--coral);font-weight:700;}
+.feature-list li::before{content:'✦';color:var(--violet);font-size:11px;}
+
+/* ===================== COMPARE ===================== */
+.compare-table{width:100%;border-collapse:collapse;margin-top:20px;}
+.compare-table th, .compare-table td{padding:16px;border-bottom:1px solid var(--border);text-align:left;font-size:14px;vertical-align:top;}
+.compare-table th{font-family:var(--font-display);font-size:15px;}
+.compare-table tr td:first-child, .compare-table tr th:first-child{color:var(--text-faint);font-family:var(--font-mono);font-size:12.5px;width:140px;}
+.compare-picker{display:flex;gap:14px;flex-wrap:wrap;margin-top:18px;}
+.compare-slot select{min-width:200px;}
+
+/* ===================== PRICING ===================== */
+.pricing-card{
+  background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-lg);padding:36px;
+  position:relative;overflow:hidden;
+}
+.pricing-card.featured{border-color:var(--violet);box-shadow:var(--shadow-glow);}
+.pricing-card.featured::before{content:'Most popular';position:absolute;top:18px;right:-34px;transform:rotate(45deg);
+  background:var(--grad-main);color:#08091a;font-size:11px;font-weight:700;padding:4px 40px;}
+.price-num{font-family:var(--font-display);font-size:44px;font-weight:700;margin:14px 0;}
+.price-num span{font-size:16px;color:var(--text-faint);font-weight:500;}
+.pricing-feat{display:flex;flex-direction:column;gap:12px;margin:24px 0;font-size:14.5px;}
+.pricing-feat li{display:flex;gap:10px;color:var(--text-dim);}
+.pricing-feat li::before{content:'✓';color:var(--cyan);font-weight:700;}
+
+/* ===================== AUTH / FORMS ===================== */
+.auth-shell{max-width:420px;margin:80px auto;}
+.form-row{margin-bottom:16px;}
+.form-row label{display:block;font-size:13px;color:var(--text-dim);margin-bottom:7px;}
+
+/* ===================== ADMIN ===================== */
+.admin-layout{display:grid;grid-template-columns:220px 1fr;gap:32px;}
+.admin-side{display:flex;flex-direction:column;gap:4px;}
+.admin-side a{padding:12px 14px;border-radius:10px;font-size:14px;color:var(--text-dim);font-weight:600;}
+.admin-side a.active, .admin-side a:hover{background:var(--surface-2);color:var(--text);}
+.admin-table{width:100%;border-collapse:collapse;}
+.admin-table th,.admin-table td{padding:13px 12px;border-bottom:1px solid var(--border);font-size:13.5px;text-align:left;}
+.admin-table th{color:var(--text-faint);font-size:11.5px;text-transform:uppercase;letter-spacing:.04em;}
+.stat-card{background:var(--surface);border:1px solid var(--border);border-radius:var(--radius-md);padding:22px;}
+.stat-card .num{font-family:var(--font-display);font-size:30px;font-weight:700;}
+@media (max-width:880px){.admin-layout{grid-template-columns:1fr;} .admin-side{flex-direction:row;overflow-x:auto;}}
+
+/* ===================== MARQUEE / LOGO STRIP ===================== */
+.logo-strip{display:flex;gap:40px;align-items:center;overflow:hidden;mask-image:linear-gradient(90deg,transparent,#000 10%,#000 90%,transparent);}
+.logo-strip-track{display:flex;gap:60px;animation:scroll-x 28s linear infinite;flex:none;}
+@keyframes scroll-x{from{transform:translateX(0);}to{transform:translateX(-50%);}}
+.logo-strip-item{font-family:var(--font-display);font-weight:700;font-size:20px;color:var(--text-faint);opacity:.7;white-space:nowrap;}
+
+/* ===================== EMPTY STATE ===================== */
+.empty-state{text-align:center;padding:60px 20px;color:var(--text-dim);}
+.empty-state .ico{font-size:34px;margin-bottom:14px;}
+
+/* ===================== CHAT ATTACH / PHOTO ===================== */
+.attach-btn{
+  width:44px;height:44px;border-radius:12px;border:1px solid var(--border);background:var(--surface);
+  display:flex;align-items:center;justify-content:center;font-size:18px;flex:none;cursor:pointer;color:var(--text-dim);
+}
+.attach-btn:hover{border-color:var(--violet);color:var(--violet);}
+.img-preview-row{display:flex;gap:10px;margin-bottom:10px;flex-wrap:wrap;}
+.img-preview{position:relative;width:64px;height:64px;border-radius:10px;overflow:hidden;border:1px solid var(--border);}
+.img-preview img{width:100%;height:100%;object-fit:cover;display:block;}
+.img-preview .remove-img{
+  position:absolute;top:2px;right:2px;width:18px;height:18px;border-radius:50%;background:rgba(0,0,0,0.6);
+  color:#fff;font-size:11px;display:flex;align-items:center;justify-content:center;cursor:pointer;border:none;
+}
+.bubble-img{max-width:220px;border-radius:10px;display:block;margin-bottom:8px;}
+
+/* ===================== ANIMATIONS ===================== */
+@keyframes fade-up{from{opacity:0;transform:translateY(16px);}to{opacity:1;transform:translateY(0);}}
+.reveal{animation:fade-up .6s ease both;}
+</style>
+<style>
+  /* SPA-only tweaks */
+  a[href^="#/"]{cursor:pointer;}
+  .tab-link{cursor:pointer;}
+</style>
+</head>
+<body>
+<nav class="nav" id="navMount"></nav>
+<main id="app"></main>
+<footer class="footer" id="footMount"></footer>
+
+<script>// AI Universe — tool dataset
+// pricing: "Free" | "Freemium" | "Paid"
+const TOOLS = [
+  // AI Assistants
+  { id:"chatgpt", url:"https://chat.openai.com", name:"ChatGPT", maker:"OpenAI", category:"AI Assistants", tags:["student","creator","work","dev"],
+    logo:"💬", color:"#74AA9C", rating:4.8, reviews:18420, pricing:"Freemium", priceFrom:"Free · Plus $20/mo",
+    blurb:"A general-purpose AI chat assistant for writing, research, coding and brainstorming.",
+    who:"Anyone who needs a fast, flexible thinking partner — students, writers, developers, founders.",
+    features:["Natural language chat","Code generation & debugging","Web browsing & file uploads","Custom GPTs","Voice mode"],
+    pros:["Extremely versatile","Huge plugin / GPT ecosystem","Fast and reliable"],
+    cons:["Can hallucinate facts","Free tier rate-limited","Advanced features need Plus"],
+    alternatives:["claude","gemini","copilot"], new:false, trending:true, weekly:true },
+
+  { id:"claude", url:"https://claude.ai", name:"Claude", maker:"Anthropic", category:"AI Assistants", tags:["student","creator","work","dev"],
+    logo:"✦", color:"#D97757", rating:4.9, reviews:9210, pricing:"Freemium", priceFrom:"Free · Pro $20/mo",
+    blurb:"A thoughtful AI assistant known for long-context reasoning, writing quality, and safe, careful answers.",
+    who:"Professionals and writers who need deep document analysis, long-form writing, and careful reasoning.",
+    features:["1M-token long context","Artifacts for docs & code","Strong writing voice","Vision input","Projects & memory"],
+    pros:["Excellent long-document handling","Natural writing style","Strong coding ability"],
+    cons:["Smaller plugin ecosystem","No native image generation"],
+    alternatives:["chatgpt","gemini","perplexity"], new:false, trending:true, weekly:true },
+
+  { id:"gemini", url:"https://gemini.google.com", name:"Google Gemini", maker:"Google", category:"AI Assistants", tags:["student","creator","work"],
+    logo:"✶", color:"#8AB4F8", rating:4.6, reviews:7320, pricing:"Freemium", priceFrom:"Free · Advanced $19.99/mo",
+    blurb:"Google's multimodal AI assistant, deeply integrated with Search, Docs, Gmail and Android.",
+    who:"People already living in the Google ecosystem who want AI inside Docs, Sheets and Gmail.",
+    features:["Workspace integration","Multimodal (text, image, video)","Real-time Search grounding","Gem custom assistants"],
+    pros:["Tight Google integration","Strong multimodal understanding","Generous free tier"],
+    cons:["Inconsistent quality across models","UI spread across many apps"],
+    alternatives:["chatgpt","claude","copilot"], new:false, trending:true, weekly:false },
+
+  { id:"copilot", url:"https://copilot.microsoft.com", name:"Microsoft Copilot", maker:"Microsoft", category:"AI Assistants", tags:["work","dev"],
+    logo:"◈", color:"#5B5FC7", rating:4.4, reviews:5210, pricing:"Freemium", priceFrom:"Free · M365 Copilot $30/mo",
+    blurb:"An AI assistant woven into Windows, Edge and Microsoft 365 for everyday office work.",
+    who:"Office workers and managers already using Word, Excel, Outlook and Teams.",
+    features:["Embedded in Office apps","Meeting recaps in Teams","Excel formula help","Email drafting in Outlook"],
+    pros:["Lives inside tools people already use","Good for office workflows","Enterprise-grade security"],
+    cons:["Full power needs paid M365 Copilot","Less flexible outside Microsoft apps"],
+    alternatives:["chatgpt","gemini","notionai"], new:false, trending:false, weekly:true },
+
+  { id:"perplexity", url:"https://www.perplexity.ai", name:"Perplexity", maker:"Perplexity AI", category:"AI Assistants", tags:["student","work","research"],
+    logo:"◎", color:"#20808D", rating:4.7, reviews:4110, pricing:"Freemium", priceFrom:"Free · Pro $20/mo",
+    blurb:"An answer engine that searches the web and cites sources for every claim it makes.",
+    who:"Researchers, students and curious people who want sourced, up-to-date answers fast.",
+    features:["Real-time web search","Inline citations","Focus modes (Academic, Reddit, etc.)","Pro Search reasoning"],
+    pros:["Trustworthy citations","Fast and current","Clean, distraction-free UI"],
+    cons:["Less creative writing ability","Pro features behind paywall"],
+    alternatives:["chatgpt","consensus","elicit"], new:false, trending:true, weekly:true },
+
+  // Writing
+  { id:"grammarly", url:"https://www.grammarly.com", name:"Grammarly", maker:"Grammarly Inc.", category:"Writing", tags:["student","creator","work"],
+    logo:"✓", color:"#15C39A", rating:4.6, reviews:15300, pricing:"Freemium", priceFrom:"Free · Premium $12/mo",
+    blurb:"An AI writing assistant that fixes grammar, tone and clarity everywhere you type.",
+    who:"Anyone who writes emails, essays or reports and wants polished, error-free text.",
+    features:["Grammar & spelling checks","Tone detection","Browser & desktop extension","AI rewriting suggestions"],
+    pros:["Works almost everywhere you type","Great tone feedback","Easy to use"],
+    cons:["Premium needed for full suggestions","Can over-correct natural voice"],
+    alternatives:["quillbot","writesonic"], new:false, trending:false, weekly:true },
+
+  { id:"jasper", url:"https://www.jasper.ai", name:"Jasper", maker:"Jasper AI", category:"Writing", tags:["creator","work"],
+    logo:"J", color:"#FF6B5B", rating:4.4, reviews:3210, pricing:"Paid", priceFrom:"From $39/mo",
+    blurb:"An enterprise AI copywriting platform for marketing teams and brand-consistent content.",
+    who:"Marketing teams who need on-brand copy at scale across channels.",
+    features:["Brand voice training","50+ templates","Campaign workflows","Team collaboration"],
+    pros:["Strong brand consistency tools","Built for teams","Good template library"],
+    cons:["No free plan","Pricier than competitors"],
+    alternatives:["copyai","writesonic"], new:false, trending:false, weekly:false },
+
+  { id:"copyai", url:"https://www.copy.ai", name:"Copy.ai", maker:"Copy.ai", category:"Writing", tags:["creator","work"],
+    logo:"©", color:"#7C5CFF", rating:4.3, reviews:2870, pricing:"Freemium", priceFrom:"Free · Pro $49/mo",
+    blurb:"An AI copy generator for ads, emails and social captions with workflow automation.",
+    who:"Solo marketers and small teams who want quick, repeatable copy.",
+    features:["Workflow automation","90+ copy templates","Chat mode","Team workspaces"],
+    pros:["Generous free tier","Easy workflow builder","Fast output"],
+    cons:["Output sometimes generic","Best results need editing"],
+    alternatives:["jasper","writesonic"], new:false, trending:false, weekly:false },
+
+  { id:"writesonic", url:"https://writesonic.com", name:"Writesonic", maker:"Writesonic Inc.", category:"Writing", tags:["creator","work"],
+    logo:"W", color:"#1F9E80", rating:4.2, reviews:2140, pricing:"Freemium", priceFrom:"Free · Pro $19/mo",
+    blurb:"An all-in-one AI writer for blog posts, ads and SEO-optimized articles.",
+    who:"Bloggers and SEO content teams who need long-form articles fast.",
+    features:["SEO content tools","Article writer 6.0","Image generation add-on","Chatsonic chat mode"],
+    pros:["Strong SEO features","Affordable plans","Bulk content tools"],
+    cons:["UI can feel cluttered","Quality varies by template"],
+    alternatives:["jasper","copyai"], new:false, trending:false, weekly:false },
+
+  { id:"quillbot", url:"https://quillbot.com", name:"QuillBot", maker:"QuillBot", category:"Writing", tags:["student"],
+    logo:"Q", color:"#3F8CFF", rating:4.5, reviews:9870, pricing:"Freemium", priceFrom:"Free · Premium $9.95/mo",
+    blurb:"A paraphrasing and grammar tool built especially for students and academic writing.",
+    who:"Students who need to paraphrase, summarize and cite sources for essays.",
+    features:["Paraphraser with 9 modes","Grammar checker","Summarizer","Citation generator"],
+    pros:["Great for academic writing","Affordable student pricing","Fast summarizer"],
+    cons:["Free word limits per session","Paraphrasing can feel mechanical"],
+    alternatives:["grammarly"], new:false, trending:false, weekly:true },
+
+  // Image Generation
+  { id:"midjourney", url:"https://www.midjourney.com", name:"Midjourney", maker:"Midjourney Inc.", category:"Image Generation", tags:["creator","designer"],
+    logo:"◆", color:"#8C6BFF", rating:4.8, reviews:11200, pricing:"Paid", priceFrom:"From $10/mo",
+    blurb:"The leading AI image generator for stunning, artistic and highly stylized visuals.",
+    who:"Designers, artists and creators who want the most aesthetically refined AI images.",
+    features:["Discord & web app","Style references","Upscaling & variations","Niji anime mode"],
+    pros:["Best-in-class image quality","Strong artistic style control","Active community"],
+    cons:["No free tier","Learning curve for prompting"],
+    alternatives:["dalle","leonardo","ideogram"], new:false, trending:true, weekly:true },
+
+  { id:"dalle", url:"https://openai.com/dall-e-3", name:"DALL·E", maker:"OpenAI", category:"Image Generation", tags:["creator"],
+    logo:"◐", color:"#74AA9C", rating:4.5, reviews:8420, pricing:"Freemium", priceFrom:"Included with ChatGPT Plus",
+    blurb:"OpenAI's image generator, built directly into ChatGPT for fast, prompt-accurate visuals.",
+    who:"ChatGPT users who want quick illustrations without leaving the chat.",
+    features:["Inline in ChatGPT","Strong text rendering","Inpainting edits","Prompt-accurate composition"],
+    pros:["Very accurate to prompts","Seamless ChatGPT integration","Good at text in images"],
+    cons:["Less artistic flair than Midjourney","Standalone access limited"],
+    alternatives:["midjourney","leonardo"], new:false, trending:false, weekly:true },
+
+  { id:"leonardo", url:"https://leonardo.ai", name:"Leonardo AI", maker:"Leonardo.Ai", category:"Image Generation", tags:["creator","designer"],
+    logo:"L", color:"#FFB23F", rating:4.5, reviews:5630, pricing:"Freemium", priceFrom:"Free · Paid from $12/mo",
+    blurb:"A creative suite for AI image generation with fine-grained control for game and product art.",
+    who:"Game artists and product designers who need consistent characters and assets.",
+    features:["Custom model training","Canvas editing","Motion (image-to-video)","Texture generation"],
+    pros:["Generous free credits","Great for consistent characters","Built-in editing canvas"],
+    cons:["Interface has a learning curve","Credit system can run out fast"],
+    alternatives:["midjourney","dalle"], new:false, trending:true, weekly:false },
+
+  { id:"firefly", url:"https://firefly.adobe.com", name:"Adobe Firefly", maker:"Adobe", category:"Image Generation", tags:["designer","creator"],
+    logo:"F", color:"#FF61F6", rating:4.4, reviews:4310, pricing:"Freemium", priceFrom:"Free · Premium $9.99/mo",
+    blurb:"Adobe's generative AI, trained on licensed content and built into Photoshop and Illustrator.",
+    who:"Designers already working in Adobe Creative Cloud who need commercially-safe assets.",
+    features:["Generative Fill in Photoshop","Text effects","Vector recoloring","Commercially safe training data"],
+    pros:["Safe for commercial use","Deep Creative Cloud integration","Fast generative fill"],
+    cons:["Best value needs CC subscription","Style range narrower than rivals"],
+    alternatives:["midjourney","leonardo"], new:false, trending:false, weekly:false },
+
+  { id:"ideogram", url:"https://ideogram.ai", name:"Ideogram", maker:"Ideogram AI", category:"Image Generation", tags:["creator","designer"],
+    logo:"I", color:"#00E0C6", rating:4.5, reviews:2980, pricing:"Freemium", priceFrom:"Free · Plus $8/mo",
+    blurb:"An AI image generator that excels at rendering accurate, legible text inside images.",
+    who:"Designers making posters, logos and memes that need crisp typography.",
+    features:["Best-in-class text rendering","Magic prompt","Style presets","Public community feed"],
+    pros:["Outstanding text accuracy","Clean, modern UI","Fast generation"],
+    cons:["Smaller community than Midjourney","Fewer advanced editing tools"],
+    alternatives:["midjourney","firefly"], new:true, trending:true, weekly:false },
+
+  // Video AI
+  { id:"runway", url:"https://runwayml.com", name:"Runway", maker:"Runway ML", category:"Video AI", tags:["creator","designer"],
+    logo:"▶", color:"#00E0C6", rating:4.5, reviews:3870, pricing:"Freemium", priceFrom:"Free · Standard $12/mo",
+    blurb:"A professional AI video generation and editing suite used by filmmakers and studios.",
+    who:"Video creators and filmmakers who want cinematic AI-generated footage and edits.",
+    features:["Gen-3 text-to-video","Motion brush","Green screen AI","Video-to-video style transfer"],
+    pros:["Cinematic output quality","Powerful editing tools","Frequent model updates"],
+    cons:["Credits run out quickly","Steeper learning curve"],
+    alternatives:["pika","synthesia"], new:false, trending:true, weekly:true },
+
+  { id:"pika", url:"https://pika.art", name:"Pika", maker:"Pika Labs", category:"Video AI", tags:["creator"],
+    logo:"▷", color:"#FF6B5B", rating:4.3, reviews:1980, pricing:"Freemium", priceFrom:"Free · Standard $10/mo",
+    blurb:"A fast, fun text-to-video generator for short, social-ready AI clips.",
+    who:"Social creators who want quick, stylish video clips without editing skills.",
+    features:["Text & image-to-video","Lip sync","Sound effects generation","Modify region tool"],
+    pros:["Very easy to use","Fast generation times","Good for social content"],
+    cons:["Shorter clip lengths","Less control than Runway"],
+    alternatives:["runway","heygen"], new:true, trending:true, weekly:false },
+
+  { id:"synthesia", url:"https://www.synthesia.io", name:"Synthesia", maker:"Synthesia", category:"Video AI", tags:["work","creator"],
+    logo:"S", color:"#5B5FC7", rating:4.6, reviews:4120, pricing:"Paid", priceFrom:"From $22/mo",
+    blurb:"AI avatar video generator for training, marketing and explainer videos with no camera needed.",
+    who:"L&D teams and marketers who need professional talking-head videos at scale.",
+    features:["140+ AI avatars","120+ languages","Screen recorder","Brand templates"],
+    pros:["Studio-quality avatars","Huge language support","Fast turnaround"],
+    cons:["No real free tier","Avatars can feel uncanny"],
+    alternatives:["heygen","pika"], new:false, trending:false, weekly:true },
+
+  { id:"heygen", url:"https://www.heygen.com", name:"HeyGen", maker:"HeyGen", category:"Video AI", tags:["creator","work"],
+    logo:"H", color:"#7C5CFF", rating:4.6, reviews:3340, pricing:"Freemium", priceFrom:"Free · Creator $29/mo",
+    blurb:"An AI avatar and translation platform for fast, personalized video creation.",
+    who:"Creators and sales teams who want personalized video at scale.",
+    features:["Instant avatars","Video translation & dubbing","Photo avatar","API access"],
+    pros:["Best-in-class avatar realism","Strong translation/dubbing","Active product updates"],
+    cons:["Free tier is limited","Watermark on free plan"],
+    alternatives:["synthesia","pika"], new:true, trending:true, weekly:false },
+
+  // Design
+  { id:"canva", url:"https://www.canva.com", name:"Canva AI", maker:"Canva", category:"Design", tags:["designer","creator","student"],
+    logo:"◧", color:"#00C4CC", rating:4.7, reviews:21400, pricing:"Freemium", priceFrom:"Free · Pro $12.99/mo",
+    blurb:"The everyday design tool, now supercharged with AI image, text and Magic Studio tools.",
+    who:"Anyone who needs quick, beautiful designs without design training.",
+    features:["Magic Studio AI suite","Text-to-image","Background remover","Brand kits & templates"],
+    pros:["Huge template library","Beginner-friendly","Great free tier"],
+    cons:["AI quality below specialist tools","Can feel template-heavy"],
+    alternatives:["figmaai","gamma"], new:false, trending:true, weekly:true },
+
+  { id:"figmaai", url:"https://www.figma.com", name:"Figma AI", maker:"Figma", category:"Design", tags:["designer","dev"],
+    logo:"◭", color:"#A259FF", rating:4.5, reviews:5210, pricing:"Freemium", priceFrom:"Free · Org plans vary",
+    blurb:"AI features built directly into Figma for faster prototyping and design handoff.",
+    who:"Product designers and UI teams who want to speed up prototyping inside Figma.",
+    features:["AI rename layers","Visual search","Prototype generation","Asset search"],
+    pros:["Lives inside your design workflow","Speeds up repetitive tasks","Tight dev handoff"],
+    cons:["Requires Figma subscription","Features still expanding"],
+    alternatives:["canva","gamma"], new:true, trending:false, weekly:false },
+
+  { id:"gamma", url:"https://gamma.app", name:"Gamma", maker:"Gamma", category:"Design", tags:["work","student","creator"],
+    logo:"γ", color:"#7C5CFF", rating:4.6, reviews:3980, pricing:"Freemium", priceFrom:"Free · Plus $10/mo",
+    blurb:"An AI presentation and document generator that turns text prompts into polished slides.",
+    who:"Anyone who needs a beautiful deck or one-pager in minutes, not hours.",
+    features:["Prompt-to-deck generation","Auto-layout design","Web page mode","Interactive cards"],
+    pros:["Extremely fast to use","Modern, clean templates","No design skill needed"],
+    cons:["Less precise control than PowerPoint","Free tier capped on AI credits"],
+    alternatives:["canva","notionai"], new:true, trending:true, weekly:true },
+
+  // Coding
+  { id:"ghcopilot", url:"https://github.com/features/copilot", name:"GitHub Copilot", maker:"GitHub / Microsoft", category:"Coding", tags:["dev"],
+    logo:"⌨", color:"#3FB950", rating:4.6, reviews:15200, pricing:"Freemium", priceFrom:"Free tier · $10/mo",
+    blurb:"The original AI pair programmer, autocompleting and chatting inside your code editor.",
+    who:"Developers who want fast, inline code suggestions in VS Code, JetBrains and beyond.",
+    features:["Inline code completion","Copilot Chat","PR summaries","CLI support"],
+    pros:["Deep IDE integration","Huge usage at scale","Constantly improving models"],
+    cons:["Suggestions need review","Context window smaller than Cursor"],
+    alternatives:["cursor","replitai"], new:false, trending:true, weekly:true },
+
+  { id:"cursor", url:"https://www.cursor.com", name:"Cursor", maker:"Anysphere", category:"Coding", tags:["dev"],
+    logo:"▣", color:"#000000", rating:4.8, reviews:6210, pricing:"Freemium", priceFrom:"Free · Pro $20/mo",
+    blurb:"An AI-first code editor built on VS Code, designed for multi-file agentic coding.",
+    who:"Developers who want an editor built around AI from the ground up, not bolted on.",
+    features:["Multi-file agent edits","Codebase-aware chat","Tab autocomplete","One-click apply diffs"],
+    pros:["Best-in-class agentic editing","Fast and accurate completions","Familiar VS Code feel"],
+    cons:["Power users need Pro plan","Newer, smaller ecosystem"],
+    alternatives:["ghcopilot","replitai"], new:true, trending:true, weekly:true },
+
+  { id:"replitai", url:"https://replit.com", name:"Replit AI", maker:"Replit", category:"Coding", tags:["dev","student"],
+    logo:"▤", color:"#F26207", rating:4.3, reviews:3120, pricing:"Freemium", priceFrom:"Free · Core $20/mo",
+    blurb:"A browser-based coding environment with AI agents that can build and deploy full apps.",
+    who:"Students and indie builders who want to go from idea to deployed app in the browser.",
+    features:["Replit Agent app builder","Instant hosting & deploy","Multiplayer coding","No setup required"],
+    pros:["Zero setup, runs in browser","Great for learning to code","Built-in deployment"],
+    cons:["Agent can be unpredictable","Best features need paid plan"],
+    alternatives:["cursor","ghcopilot"], new:false, trending:false, weekly:false },
+
+  // Research
+  { id:"elicit", url:"https://elicit.com", name:"Elicit", maker:"Elicit", category:"Research", tags:["student","research"],
+    logo:"E", color:"#3F8CFF", rating:4.5, reviews:1420, pricing:"Freemium", priceFrom:"Free · Plus $12/mo",
+    blurb:"An AI research assistant that searches academic papers and extracts key findings into tables.",
+    who:"Researchers and grad students doing literature reviews across many papers.",
+    features:["Paper search across 125M+ papers","Auto-extracted data tables","Summarized findings","Systematic review tools"],
+    pros:["Saves huge literature-review time","Transparent sourcing","Good for systematic reviews"],
+    cons:["Narrower to academic use","Free tier limited on extractions"],
+    alternatives:["consensus","perplexity"], new:false, trending:false, weekly:false },
+
+  { id:"consensus", url:"https://consensus.app", name:"Consensus", maker:"Consensus", category:"Research", tags:["student","research"],
+    logo:"C", color:"#FFB23F", rating:4.5, reviews:1190, pricing:"Freemium", priceFrom:"Free · Premium $9.99/mo",
+    blurb:"A search engine that finds and summarizes peer-reviewed research to answer questions.",
+    who:"Students and professionals who want quick, evidence-based answers from real studies.",
+    features:["Consensus meter on claims","Study summaries","Citation links","GPT-powered synthesis"],
+    pros:["Fast access to real studies","Consensus meter is unique","Easy to use"],
+    cons:["Coverage thinner outside hard sciences","Premium needed for full synthesis"],
+    alternatives:["elicit","wolfram"], new:false, trending:false, weekly:false },
+
+  { id:"wolfram", url:"https://www.wolframalpha.com", name:"Wolfram Alpha", maker:"Wolfram", category:"Research", tags:["student","research","dev"],
+    logo:"Σ", color:"#DD1100", rating:4.6, reviews:8720, pricing:"Freemium", priceFrom:"Free · Pro $7.25/mo",
+    blurb:"A computational knowledge engine that solves math, science and data questions step by step.",
+    who:"Students and engineers who need precise computation, not just generated text.",
+    features:["Step-by-step math solutions","Unit & currency conversion","Data & science queries","Plotting & visualization"],
+    pros:["Genuinely precise computation","Huge curated knowledge base","Great step-by-step learning"],
+    cons:["Interface feels dated","Less natural-language friendly"],
+    alternatives:["elicit","consensus"], new:false, trending:false, weekly:false },
+
+  // Students
+  { id:"quizletai", url:"https://quizlet.com", name:"Quizlet AI", maker:"Quizlet", category:"Students", tags:["student"],
+    logo:"Q", color:"#4255FF", rating:4.5, reviews:9230, pricing:"Freemium", priceFrom:"Free · Plus $7.99/mo",
+    blurb:"AI-powered flashcards and practice tests that adapt to how well you know each topic.",
+    who:"Students at any level who want to memorize and self-test efficiently.",
+    features:["Magic Notes (notes to flashcards)","Q-Chat AI tutor","Adaptive practice tests","Spaced repetition"],
+    pros:["Turns any notes into flashcards instantly","Strong adaptive practice","Huge shared study set library"],
+    cons:["AI tutor limited on free tier","Ads on free plan"],
+    alternatives:["khanmigo","notionai"], new:false, trending:false, weekly:true },
+
+  { id:"khanmigo", url:"https://www.khanmigo.ai", name:"Khanmigo", maker:"Khan Academy", category:"Students", tags:["student"],
+    logo:"K", color:"#1865F2", rating:4.7, reviews:2410, pricing:"Paid", priceFrom:"From $4/mo (often free for schools)",
+    blurb:"A patient AI tutor from Khan Academy that guides students to answers instead of giving them away.",
+    who:"K-12 and college students who want a Socratic tutor, not just an answer machine.",
+    features:["Socratic tutoring style","Subject-specific guidance","Essay feedback","Teacher dashboard tools"],
+    pros:["Designed for real learning, not cheating","Backed by Khan Academy content","Often free through schools"],
+    cons:["Less flexible than general chatbots","Smaller subject coverage than ChatGPT"],
+    alternatives:["quizletai","chatgpt"], new:false, trending:false, weekly:false },
+
+  { id:"notionai", url:"https://www.notion.so/product/ai", name:"Notion AI", maker:"Notion", category:"Productivity", tags:["student","work","creator"],
+    logo:"N", color:"#000000", rating:4.6, reviews:7320, pricing:"Freemium", priceFrom:"Add-on from $10/mo",
+    blurb:"AI built into your notes and docs for writing, summarizing and organizing your workspace.",
+    who:"Students, teams and professionals who already organize their life and work in Notion.",
+    features:["AI writing & autofill","Q&A over your workspace","Meeting notes summarizer","Translation"],
+    pros:["Works right inside your notes","Great for summarizing long docs","Flexible across use cases"],
+    cons:["Adds cost on top of Notion plan","Needs a Notion habit already"],
+    alternatives:["clickupai","motion"], new:false, trending:true, weekly:true },
+
+  // Productivity
+  { id:"clickupai", url:"https://clickup.com/ai", name:"ClickUp AI", maker:"ClickUp", category:"Productivity", tags:["work","manager"],
+    logo:"⌬", color:"#7B68EE", rating:4.4, reviews:4870, pricing:"Freemium", priceFrom:"Free · Add-on $5/user/mo",
+    blurb:"AI built into a project management platform for task summaries, docs and standups.",
+    who:"Managers and teams running projects who want AI baked into their task workflow.",
+    features:["Task summarization","AI standup generator","Doc writing assistant","Action item extraction"],
+    pros:["Tightly tied to real project data","Good for status updates","Affordable add-on pricing"],
+    cons:["Best value needs ClickUp adoption","Can feel feature-overloaded"],
+    alternatives:["motion","notionai"], new:false, trending:false, weekly:false },
+
+  { id:"motion", url:"https://www.usemotion.com", name:"Motion", maker:"Motion", category:"Productivity", tags:["work","manager"],
+    logo:"M", color:"#FF5A5F", rating:4.3, reviews:1980, pricing:"Paid", priceFrom:"From $19/mo",
+    blurb:"An AI calendar and task manager that automatically schedules your day around deadlines.",
+    who:"Busy professionals and managers juggling meetings, tasks and shifting priorities.",
+    features:["Auto-scheduling","Deadline-aware planning","Calendar conflict resolution","Project timelines"],
+    pros:["Genuinely automates scheduling","Saves real planning time","Syncs across calendars"],
+    cons:["No free plan","Takes time to trust the automation"],
+    alternatives:["clickupai","notionai"], new:true, trending:false, weekly:false },
+];
+
+const CATEGORIES = [
+  { name:"AI Assistants", icon:"💬", desc:"General-purpose chat & reasoning AIs" },
+  { name:"Writing", icon:"✎", desc:"Grammar, copy & content writing" },
+  { name:"Image Generation", icon:"🎨", desc:"Text-to-image & art generation" },
+  { name:"Video AI", icon:"🎬", desc:"AI video creation & avatars" },
+  { name:"Design", icon:"◧", desc:"AI-assisted design & presentations" },
+  { name:"Coding", icon:"⌨", desc:"AI pair-programmers & dev tools" },
+  { name:"Research", icon:"🔬", desc:"Academic & computational research" },
+  { name:"Students", icon:"🎓", desc:"Study, flashcards & tutoring" },
+  { name:"Productivity", icon:"⚡", desc:"Planning, tasks & teamwork" },
+];
+</script>
+<script>// Constellation canvas — the "universe" of AI tools, connecting like stars
+function initConstellation(canvasId){
+    const canvas = document.getElementById(canvasId);
+    if(!canvas) return;
+    const ctx = canvas.getContext('2d');
+    let w,h, points=[];
+    const NAMES = ["GPT","Claude","Gemini","Midjourney","Runway","Copilot","Notion","Canva","Cursor","Jasper","Perplexity","Leonardo"];
+
+    function resize(){
+      w = canvas.parentElement.offsetWidth;
+      h = canvas.parentElement.offsetHeight;
+      canvas.width = w * devicePixelRatio;
+      canvas.height = h * devicePixelRatio;
+      canvas.style.width = w+'px';
+      canvas.style.height = h+'px';
+      ctx.scale(devicePixelRatio, devicePixelRatio);
+      buildPoints();
+    }
+    function buildPoints(){
+      points = [];
+      const count = Math.max(18, Math.floor((w*h)/26000));
+      for(let i=0;i<count;i++){
+        points.push({
+          x: Math.random()*w, y: Math.random()*h,
+          vx:(Math.random()-0.5)*0.18, vy:(Math.random()-0.5)*0.18,
+          r: Math.random()*1.6+0.8,
+          label: Math.random()<0.16 ? NAMES[Math.floor(Math.random()*NAMES.length)] : null
+        });
+      }
+    }
+    let mouse = {x:-9999,y:-9999};
+    canvas.parentElement.addEventListener('mousemove', e=>{
+      const rect = canvas.getBoundingClientRect();
+      mouse.x = e.clientX - rect.left; mouse.y = e.clientY - rect.top;
+    });
+    canvas.parentElement.addEventListener('mouseleave', ()=>{ mouse.x=-9999; mouse.y=-9999; });
+
+    const isDark = ()=> document.documentElement.getAttribute('data-theme') !== 'light';
+
+    function draw(){
+      ctx.clearRect(0,0,w,h);
+      const dotColor = isDark() ? 'rgba(180,190,255,0.85)' : 'rgba(90,80,180,0.6)';
+      const lineColorBase = isDark() ? [124,92,255] : [124,92,255];
+
+      points.forEach(p=>{
+        p.x += p.vx; p.y += p.vy;
+        if(p.x<0||p.x>w) p.vx*=-1;
+        if(p.y<0||p.y>h) p.vy*=-1;
+        const dx = p.x-mouse.x, dy = p.y-mouse.y;
+        const dist = Math.sqrt(dx*dx+dy*dy);
+        if(dist<120){ p.x += dx/dist*0.6; p.y += dy/dist*0.6; }
+      });
+
+      for(let i=0;i<points.length;i++){
+        for(let j=i+1;j<points.length;j++){
+          const a=points[i], b=points[j];
+          const d = Math.hypot(a.x-b.x, a.y-b.y);
+          if(d<150){
+            const op = (1-d/150) * 0.5;
+            ctx.strokeStyle = `rgba(${lineColorBase[0]},${lineColorBase[1]},${lineColorBase[2]},${op*0.5})`;
+            ctx.lineWidth=1;
+            ctx.beginPath(); ctx.moveTo(a.x,a.y); ctx.lineTo(b.x,b.y); ctx.stroke();
+          }
+        }
+      }
+      points.forEach(p=>{
+        ctx.beginPath();
+        ctx.fillStyle = dotColor;
+        ctx.arc(p.x,p.y,p.r,0,Math.PI*2);
+        ctx.fill();
+        if(p.label){
+          ctx.font = '11px "JetBrains Mono", monospace';
+          ctx.fillStyle = isDark() ? 'rgba(0,224,198,0.55)' : 'rgba(124,92,255,0.55)';
+          ctx.fillText(p.label, p.x+8, p.y+3);
+        }
+      });
+      requestAnimationFrame(draw);
+    }
+    window.addEventListener('resize', resize);
+    resize();
+    draw();
+}
+</script>
+<script>/* ============================================================
+   AI UNIVERSE SPA — router + page renderers
+   ============================================================ */
+
+/* ---------- theme ---------- */
+const Theme = {
+  init(){
+    const saved = localStorage.getItem('au_theme') || 'dark';
+    document.documentElement.setAttribute('data-theme', saved);
+  },
+  toggle(){
+    const cur = document.documentElement.getAttribute('data-theme');
+    const next = cur === 'dark' ? 'light' : 'dark';
+    document.documentElement.setAttribute('data-theme', next);
+    localStorage.setItem('au_theme', next);
+    document.querySelectorAll('.theme-toggle').forEach(b=> b.textContent = next==='dark'?'☾':'☀');
+  }
+};
+
+/* ---------- favorites / recents / auth ---------- */
+const Favorites = {
+  key:'au_favorites',
+  get(){ return JSON.parse(localStorage.getItem(this.key) || '[]'); },
+  has(id){ return this.get().includes(id); },
+  toggle(id){
+    let list = this.get();
+    if(list.includes(id)) list = list.filter(x=>x!==id); else list.push(id);
+    localStorage.setItem(this.key, JSON.stringify(list));
+    return list.includes(id);
+  }
+};
+const RecentlyViewed = {
+  key:'au_recent',
+  get(){ return JSON.parse(localStorage.getItem(this.key) || '[]'); },
+  add(id){ let l=this.get().filter(x=>x!==id); l.unshift(id); localStorage.setItem(this.key, JSON.stringify(l.slice(0,12))); }
+};
+const Auth = {
+  key:'au_user',
+  get(){ return JSON.parse(localStorage.getItem(this.key) || 'null'); },
+  login(name,email){ const u={name,email,premium:false,joined:new Date().toISOString().slice(0,10)}; localStorage.setItem(this.key, JSON.stringify(u)); return u; },
+  logout(){ localStorage.removeItem(this.key); },
+  setPremium(v){ const u=this.get(); if(!u) return; u.premium=v; localStorage.setItem(this.key, JSON.stringify(u)); }
+};
+
+/* ---------- helpers ---------- */
+function pricingBadge(p){ const m={Free:'badge-free',Freemium:'badge-freemium',Paid:'badge-paid'}; return `<span class="badge ${m[p]||'badge-freemium'}">${p}</span>`; }
+function stars(r){ return `★ ${r.toFixed(1)}`; }
+function toolById(id){ return TOOLS.find(t=>t.id===id); }
+function go(hash){ location.hash = hash; }
+
+function toolCardHTML(t){
+  const fav = Favorites.has(t.id);
+  return `
+  <div class="tool-card">
+    <div class="tool-card-top">
+      <div class="tool-logo" style="background:${t.color}22;color:${t.color}">${t.logo}</div>
+      <button class="tool-fav ${fav?'active':''}" data-fav="${t.id}" title="Save to favorites">${fav?'♥':'♡'}</button>
+    </div>
+    <div>
+      <div class="tool-name">${t.name}</div>
+      <div class="tool-maker">${t.maker}</div>
+    </div>
+    <p class="tool-desc">${t.blurb}</p>
+    <div class="tool-meta">
+      <span class="tool-rating">${stars(t.rating)}</span>
+      <span class="tool-cat-pill">${t.category}</span>
+      ${pricingBadge(t.pricing)}
+      ${t.new?'<span class="badge badge-new">New</span>':''}
+    </div>
+    <div class="tool-card-foot">
+      <a class="btn btn-ghost btn-sm" href="#/tool?id=${t.id}">Details</a>
+      <a class="btn btn-primary btn-sm" href="${t.url}" target="_blank" rel="noopener">Visit ↗</a>
+    </div>
+  </div>`;
+}
+function bindCardEvents(root=document){
+  root.querySelectorAll('[data-fav]').forEach(btn=>{
+    btn.addEventListener('click', e=>{
+      e.preventDefault(); e.stopPropagation();
+      const id = btn.getAttribute('data-fav');
+      const isFav = Favorites.toggle(id);
+      btn.classList.toggle('active', isFav);
+      btn.textContent = isFav ? '♥' : '♡';
+    });
+  });
+}
+function fillGrid(id, tools){ const el=document.getElementById(id); if(!el) return; el.innerHTML = tools.map(toolCardHTML).join(''); bindCardEvents(el); }
+
+/* ---------- nav / footer ---------- */
+function navHTML(active){
+  const link=(hash,label)=>`<a href="#${hash}" class="${active===hash?'active':''}">${label}</a>`;
+  return `
+  <div class="nav-inner container">
+    <a href="#/" class="logo"><span class="logo-mark">✦</span> AI Universe</a>
+    <div class="nav-links">
+      ${link('/assistant','AI Chat')}
+      ${link('/directory','Directory')}
+      ${link('/compare','Compare')}
+      ${link('/category?tag=student&t=Student','Students')}
+      ${link('/category?tag=creator&t=Creator','Creators')}
+      ${link('/category?tag=work&t=Productivity','Productivity')}
+      ${link('/category?tag=dev&t=Developer','Developers')}
+      ${link('/premium','Premium')}
+    </div>
+    <div class="nav-right">
+      <button class="icon-btn theme-toggle" onclick="Theme.toggle()" title="Toggle theme">${document.documentElement.getAttribute('data-theme')==='dark'?'☾':'☀'}</button>
+      <a href="#/favorites" class="icon-btn" title="Favorites">♡</a>
+      <span id="accountSlot"></span>
+      <button class="icon-btn nav-burger" id="burgerBtn">☰</button>
+    </div>
+  </div>
+  <div class="mobile-drawer" id="drawer">
+    <button class="icon-btn mobile-drawer-close" id="drawerClose">✕</button>
+    <a href="#/">Home</a>
+    <a href="#/assistant">AI Chat</a>
+    <a href="#/directory">Directory</a>
+    <a href="#/compare">Compare</a>
+    <a href="#/category?tag=student&t=Student">Student Tools</a>
+    <a href="#/category?tag=creator&t=Creator">Creator Tools</a>
+    <a href="#/category?tag=work&t=Productivity">Productivity</a>
+    <a href="#/category?tag=dev&t=Developer">Developer Tools</a>
+    <a href="#/favorites">Favorites</a>
+    <a href="#/premium">Premium</a>
+    <a href="#/login">Sign in</a>
+    <a href="#/admin">Admin Panel</a>
+  </div>`;
+}
+function footerHTML(){
+  return `<div class="container">
+    <div class="footer-grid">
+      <div>
+        <div class="logo" style="margin-bottom:14px;"><span class="logo-mark">✦</span> AI Universe</div>
+        <p class="text-dim" style="max-width:280px;font-size:14px;">Every great AI tool, mapped in one place — so you spend less time searching and more time creating.</p>
+      </div>
+      <div><h4>Explore</h4><ul>
+        <li><a href="#/assistant">AI Assistant</a></li>
+        <li><a href="#/directory">Full Directory</a></li>
+        <li><a href="#/compare">Compare Tools</a></li>
+        <li><a href="#/?s=trending">Trending</a></li>
+        <li><a href="#/?s=new">New Arrivals</a></li>
+      </ul></div>
+      <div><h4>Audiences</h4><ul>
+        <li><a href="#/category?tag=student&t=Student">For Students</a></li>
+        <li><a href="#/category?tag=creator&t=Creator">For Creators</a></li>
+        <li><a href="#/category?tag=work&t=Productivity">For Teams</a></li>
+        <li><a href="#/category?tag=dev&t=Developer">For Developers</a></li>
+      </ul></div>
+      <div><h4>Account</h4><ul>
+        <li><a href="#/login">Sign in</a></li>
+        <li><a href="#/premium">Go Premium</a></li>
+        <li><a href="#/favorites">My Collection</a></li>
+        <li><a href="#/admin">Admin Panel</a></li>
+      </ul></div>
+    </div>
+    <div class="footer-bottom">
+      <span>© 2026 AI Universe. All tool names &amp; trademarks belong to their owners.</span>
+      <span>Built with ✦ for explorers of the AI frontier.</span>
+    </div>
+  </div>`;
+}
+function renderAccountSlot(){
+  const slot = document.getElementById('accountSlot'); if(!slot) return;
+  const user = Auth.get();
+  slot.innerHTML = user ? `<a href="#/account" class="icon-btn" title="${user.name}">👤</a>` : `<a href="#/login" class="btn btn-ghost btn-sm">Sign in</a>`;
+}
+
+/* ============================================================
+   PAGE RENDERERS
+   ============================================================ */
+
+function pageHome(){
+  return `
+  <header class="hero">
+    <div class="hero-canvas-wrap"><canvas id="constellation"></canvas></div>
+    <div class="hero-fade"></div>
+    <div class="container hero-content">
+      <span class="eyebrow">40+ tools · 9 categories · updated weekly</span>
+      <h1 class="hero-title">Discover The Best <span class="grad-text">AI Tools</span> In One Place</h1>
+      <p class="hero-sub">Explore powerful AI tools for learning, creativity, productivity and work.</p>
+      <div class="hero-actions">
+        <a href="#/directory" class="btn btn-primary">Explore Tools</a>
+        <a href="#/category-overview" class="btn btn-ghost">View Categories</a>
+      </div>
+      <div class="hero-stats">
+        <div><div class="hero-stat-num">40+</div><div class="hero-stat-label">AI Tools</div></div>
+        <div><div class="hero-stat-num">9</div><div class="hero-stat-label">Categories</div></div>
+        <div><div class="hero-stat-num">120K+</div><div class="hero-stat-label">Monthly explorers</div></div>
+        <div><div class="hero-stat-num">4.6★</div><div class="hero-stat-label">Avg. rating</div></div>
+      </div>
+    </div>
+  </header>
+  <div class="container" style="margin-top:-10px;">
+    <div class="logo-strip"><div class="logo-strip-track" id="logoTrack"></div></div>
+  </div>
+  <section class="section" style="padding-top:8px;padding-bottom:32px;">
+    <div class="container">
+      <a href="#/assistant" class="panel reveal" style="display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;border-color:var(--violet);box-shadow:var(--shadow-glow);">
+        <div class="flex items-center gap-20" style="flex-wrap:wrap;">
+          <div class="tool-logo" style="width:56px;height:56px;font-size:24px;background:var(--grad-main);color:#08091a;flex:none;">✦</div>
+          <div>
+            <span class="eyebrow">Start here · built in-house</span>
+            <h2 style="font-size:24px;margin-top:6px;">Chat with AI right here — no other site needed</h2>
+            <p class="text-dim mt-8" style="max-width:480px;">Unlimited study &amp; doubt-solving, always free. Code help: 5 free replies a day, unlimited with Premium.</p>
+          </div>
+        </div>
+        <span class="btn btn-primary">Open AI Assistant →</span>
+      </a>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Right now</span><h2 class="section-title mt-8">Trending AI Tools</h2>
+          <p class="section-sub">The tools everyone in AI Universe is opening this week.</p></div>
+        <a href="#/directory" class="see-all">View directory →</a>
+      </div>
+      <div class="hscroll" id="trendingScroll"></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Most loved</span><h2 class="section-title mt-8">Popular This Week</h2>
+          <p class="section-sub">Ranked by ratings and real explorer activity.</p></div>
+        <a href="#/directory?sort=rating" class="see-all">See rankings →</a>
+      </div>
+      <div class="grid-4" id="popularGrid"></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Just landed</span><h2 class="section-title mt-8">New AI Tools</h2>
+          <p class="section-sub">Freshly added to the universe — worth a first look.</p></div>
+        <a href="#/directory?filter=new" class="see-all">View all new →</a>
+      </div>
+      <div class="hscroll" id="newScroll"></div>
+    </div>
+  </section>
+  <section class="section" id="category-overview">
+    <div class="container">
+      <div class="section-head">
+        <div><span class="eyebrow">Browse by world</span><h2 class="section-title mt-8">AI Tools By Category</h2>
+          <p class="section-sub">From study helpers to coding agents — find your corner of the universe.</p></div>
+      </div>
+      <div class="grid-4" id="categoryGrid"></div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container">
+      <div class="panel" style="background:var(--grad-main);border:none;display:flex;align-items:center;justify-content:space-between;gap:24px;flex-wrap:wrap;">
+        <div>
+          <h2 style="color:#08091a;font-size:28px;">Build your own AI toolbox</h2>
+          <p style="color:#08091aaa;margin-top:8px;max-width:420px;">Save favorites, get personal recommendations and unlock workflow guides with Premium.</p>
+        </div>
+        <a href="#/premium" class="btn" style="background:#08091a;color:#fff;">Go Premium →</a>
+      </div>
+    </div>
+  </section>`;
+}
+function afterHome(){
+  const names = [...new Set(TOOLS.map(t=>t.name))];
+  document.getElementById('logoTrack').innerHTML = [...names,...names].map(n=>`<span class="logo-strip-item">${n}</span>`).join('');
+  fillGrid('trendingScroll', TOOLS.filter(t=>t.trending));
+  fillGrid('popularGrid', [...TOOLS].sort((a,b)=>b.rating-a.rating).slice(0,8));
+  fillGrid('newScroll', TOOLS.filter(t=>t.new));
+  const catCounts = {}; TOOLS.forEach(t=>catCounts[t.category]=(catCounts[t.category]||0)+1);
+  document.getElementById('categoryGrid').innerHTML = CATEGORIES.map(c=>`
+    <a class="cat-tile" href="#/directory?cat=${encodeURIComponent(c.name)}">
+      <div class="cat-icon">${c.icon}</div>
+      <div class="cat-name">${c.name}</div>
+      <div class="cat-count">${catCounts[c.name]||0} tools · ${c.desc}</div>
+    </a>`).join('');
+  initConstellation('constellation');
+}
+
+function pageDirectory(qp){
+  return `
+  <section class="page-band">
+    <div class="container">
+      <span class="eyebrow">The full universe</span>
+      <h1>AI Tool Directory</h1>
+      <p>Search, filter and compare every tool in the catalog — from AI assistants to video generators.</p>
+      <div class="search-wrap mt-24" style="max-width:560px;">
+        <span class="search-icon">🔍</span>
+        <input class="input" id="searchInput" placeholder="Search tools, e.g. “image generator” or “Claude”">
+      </div>
+    </div>
+  </section>
+  <main class="section">
+    <div class="container directory-layout">
+      <aside class="filters-panel panel">
+        <div class="filter-group"><h4>Category</h4><div class="filter-list" id="catFilters"></div></div>
+        <div class="filter-group"><h4>Pricing</h4><div class="filter-list" id="priceFilters">
+          <label><input type="checkbox" value="Free" class="price-cb"> Free</label>
+          <label><input type="checkbox" value="Freemium" class="price-cb"> Freemium</label>
+          <label><input type="checkbox" value="Paid" class="price-cb"> Paid</label>
+        </div></div>
+        <div class="filter-group"><h4>Minimum rating</h4><div class="filter-list" id="ratingFilters">
+          <label><input type="radio" name="rating" value="0" checked> Any rating</label>
+          <label><input type="radio" name="rating" value="4"> 4.0 &amp; up</label>
+          <label><input type="radio" name="rating" value="4.5"> 4.5 &amp; up</label>
+        </div></div>
+        <button class="btn btn-ghost btn-block" id="clearFilters">Clear filters</button>
+      </aside>
+      <div>
+        <div class="results-top">
+          <span class="text-dim" id="resultCount">Showing all tools</span>
+          <select class="input sort-select" id="sortSelect">
+            <option value="rating">Sort: Top rated</option>
+            <option value="name">Sort: A–Z</option>
+            <option value="reviews">Sort: Most reviewed</option>
+            <option value="new">Sort: Newest first</option>
+          </select>
+        </div>
+        <div class="grid-3" id="directoryGrid"></div>
+        <div class="empty-state hidden" id="emptyState">
+          <div class="ico">🛰️</div>
+          <p>No tools match those filters yet. Try clearing a filter or searching a different term.</p>
+        </div>
+      </div>
+    </div>
+  </main>`;
+}
+function afterDirectory(qp){
+  let state = { q: qp.get('q')||'', cats: qp.get('cat')?[qp.get('cat')]:[], prices:[], minRating:0, sort: qp.get('sort')||'rating', onlyNew: qp.get('filter')==='new' };
+  document.getElementById('catFilters').innerHTML = CATEGORIES.map(c=>`<label><input type="checkbox" value="${c.name}" class="cat-cb" ${state.cats.includes(c.name)?'checked':''}> ${c.icon} ${c.name}</label>`).join('');
+  document.getElementById('searchInput').value = state.q;
+  document.getElementById('sortSelect').value = state.sort;
+  function filtered(){
+    let list = TOOLS.filter(t=>{
+      const mq = !state.q || (t.name+t.maker+t.blurb+t.category).toLowerCase().includes(state.q.toLowerCase());
+      const mc = state.cats.length===0 || state.cats.includes(t.category);
+      const mp = state.prices.length===0 || state.prices.includes(t.pricing);
+      const mr = t.rating >= state.minRating;
+      const mn = !state.onlyNew || t.new;
+      return mq&&mc&&mp&&mr&&mn;
+    });
+    if(state.sort==='rating') list.sort((a,b)=>b.rating-a.rating);
+    if(state.sort==='name') list.sort((a,b)=>a.name.localeCompare(b.name));
+    if(state.sort==='reviews') list.sort((a,b)=>b.reviews-a.reviews);
+    if(state.sort==='new') list.sort((a,b)=>(b.new===a.new)?0:(b.new?1:-1));
+    return list;
+  }
+  function render(){
+    const list = filtered();
+    document.getElementById('resultCount').textContent = `Showing ${list.length} of ${TOOLS.length} tools`;
+    document.getElementById('directoryGrid').classList.toggle('hidden', list.length===0);
+    document.getElementById('emptyState').classList.toggle('hidden', list.length>0);
+    fillGrid('directoryGrid', list);
+  }
+  document.getElementById('searchInput').addEventListener('input', e=>{state.q=e.target.value; render();});
+  document.querySelectorAll('.cat-cb').forEach(cb=>cb.addEventListener('change', ()=>{state.cats=[...document.querySelectorAll('.cat-cb:checked')].map(c=>c.value); render();}));
+  document.querySelectorAll('.price-cb').forEach(cb=>cb.addEventListener('change', ()=>{state.prices=[...document.querySelectorAll('.price-cb:checked')].map(c=>c.value); render();}));
+  document.querySelectorAll('input[name=rating]').forEach(r=>r.addEventListener('change', e=>{state.minRating=parseFloat(e.target.value); render();}));
+  document.getElementById('sortSelect').addEventListener('change', e=>{state.sort=e.target.value; render();});
+  document.getElementById('clearFilters').addEventListener('click', ()=>{
+    state={q:'',cats:[],prices:[],minRating:0,sort:'rating',onlyNew:false};
+    document.getElementById('searchInput').value='';
+    document.querySelectorAll('.cat-cb,.price-cb').forEach(cb=>cb.checked=false);
+    document.querySelector('input[name=rating][value="0"]').checked=true;
+    document.getElementById('sortSelect').value='rating';
+    render();
+  });
+  render();
+}
+
+function pageTool(qp){
+  const t = toolById(qp.get('id'));
+  if(!t) return `<div class="section container empty-state"><div class="ico">🛰️</div><p>We couldn't find that tool. <a href="#/directory" style="color:var(--violet);">Browse the directory →</a></p></div>`;
+  RecentlyViewed.add(t.id);
+  const alts = (t.alternatives||[]).map(toolById).filter(Boolean);
+  return `
+  <section class="page-band">
+    <div class="container">
+      <a href="#/directory" class="text-faint" style="font-size:13px;">← Back to directory</a>
+      <div class="tool-hero mt-24">
+        <div class="tool-hero-logo" style="background:${t.color}22;color:${t.color}">${t.logo}</div>
+        <div style="flex:1;min-width:240px;">
+          <div class="flex items-center gap-12" style="flex-wrap:wrap;">
+            <h1 style="font-size:32px;">${t.name}</h1>
+            ${t.new?'<span class="badge badge-new">New</span>':''}
+            ${t.trending?'<span class="badge badge-trend">Trending</span>':''}
+          </div>
+          <p class="text-faint mt-8">${t.maker} · ${t.category}</p>
+          <p class="mt-16" style="max-width:600px;color:var(--text-dim);">${t.blurb}</p>
+          <div class="flex items-center gap-16 mt-24" style="flex-wrap:wrap;">
+            <span class="tool-rating" style="font-size:15px;">${stars(t.rating)} <span class="text-faint">(${t.reviews.toLocaleString()} reviews)</span></span>
+            ${pricingBadge(t.pricing)}
+            <button class="btn btn-ghost btn-sm" id="favBtn">${Favorites.has(t.id)?'♥ Saved':'♡ Save to favorites'}</button>
+          </div>
+        </div>
+        <div class="panel" style="min-width:220px;">
+          <div class="text-faint" style="font-size:12px;">PRICING</div>
+          <div style="font-weight:700;font-size:17px;margin-top:6px;">${t.priceFrom}</div>
+          <a href="${t.url}" target="_blank" rel="noopener" id="visitBtn" class="btn btn-primary btn-block mt-16">Visit ${t.name} ↗</a>
+          <p class="text-faint mt-8" style="font-size:11.5px;">Opens the official website in a new tab.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+  <section class="section">
+    <div class="container detail-grid">
+      <div>
+        <h3>Who should use it</h3>
+        <p class="text-dim mt-8">${t.who}</p>
+        <h3 class="mt-40">Main features</h3>
+        <ul class="feature-list mt-16">${t.features.map(f=>`<li>${f}</li>`).join('')}</ul>
+        <div class="grid-3" style="grid-template-columns:1fr 1fr;margin-top:40px;gap:28px;">
+          <div><h3>Pros</h3><ul class="pros-list mt-16">${t.pros.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+          <div><h3>Cons</h3><ul class="cons-list mt-16">${t.cons.map(f=>`<li>${f}</li>`).join('')}</ul></div>
+        </div>
+      </div>
+      <aside class="flex-col gap-20">
+        <div class="panel">
+          <h4 style="font-size:14px;">User rating</h4>
+          <div style="font-size:34px;font-family:var(--font-display);font-weight:700;color:var(--amber);margin-top:8px;">${t.rating.toFixed(1)} ★</div>
+          <p class="text-faint" style="font-size:13px;">${t.reviews.toLocaleString()} explorer reviews</p>
+        </div>
+        <div class="panel">
+          <h4 style="font-size:14px;">Alternatives</h4>
+          <div class="flex-col gap-12 mt-16">
+            ${alts.map(a=>`<a href="#/tool?id=${a.id}" class="flex items-center gap-12" style="font-size:14px;">
+              <span class="tool-logo" style="width:34px;height:34px;font-size:15px;background:${a.color}22;color:${a.color}">${a.logo}</span><span>${a.name}</span></a>`).join('') || '<p class="text-faint" style="font-size:13px;">No alternatives listed.</p>'}
+          </div>
+        </div>
+        <a href="#/compare?a=${t.id}" class="btn btn-ghost btn-block">Compare ${t.name} vs others →</a>
+      </aside>
+    </div>
+  </section>`;
+}
+function afterTool(qp){
+  const t = toolById(qp.get('id')); if(!t) return;
+  document.getElementById('favBtn')?.addEventListener('click', e=>{
+    const isFav = Favorites.toggle(t.id);
+    e.target.textContent = isFav ? '♥ Saved' : '♡ Save to favorites';
+  });
+}
+
+function pageCompare(qp){
+  return `
+  <section class="page-band">
+    <div class="container">
+      <span class="eyebrow">Side by side</span>
+      <h1>Compare AI Tools</h1>
+      <p>Pick two or three tools — like ChatGPT vs Claude vs Gemini — and see pricing, strengths and best-for at a glance.</p>
+      <div class="compare-picker">
+        <div class="compare-slot"><select class="input" id="slotA"></select></div>
+        <div class="compare-slot"><select class="input" id="slotB"></select></div>
+        <div class="compare-slot"><select class="input" id="slotC"></select></div>
+      </div>
+    </div>
+  </section>
+  <main class="section"><div class="container">
+    <div class="panel" style="overflow-x:auto;"><table class="compare-table" id="compareTable"></table></div>
+  </div></main>`;
+}
+function afterCompare(qp){
+  const sorted = [...TOOLS].sort((a,b)=>a.name.localeCompare(b.name));
+  function fill(sel, def){ sel.innerHTML = `<option value="">— choose a tool —</option>` + sorted.map(t=>`<option value="${t.id}" ${t.id===def?'selected':''}>${t.name}</option>`).join(''); }
+  const slotA=document.getElementById('slotA'), slotB=document.getElementById('slotB'), slotC=document.getElementById('slotC');
+  fill(slotA, qp.get('a')||'chatgpt'); fill(slotB, qp.get('b')||'claude'); fill(slotC, qp.get('c')||'gemini');
+  function row(label,cells){ return `<tr><td>${label}</td>${cells.map(c=>`<td>${c}</td>`).join('')}</tr>`; }
+  function render(){
+    const ids=[slotA.value,slotB.value,slotC.value].filter(Boolean);
+    const tools = ids.map(toolById).filter(Boolean);
+    const table = document.getElementById('compareTable');
+    if(tools.length<1){ table.innerHTML = `<tr><td>Pick at least one tool above to begin comparing.</td></tr>`; return; }
+    table.innerHTML = `
+      <tr><th>Tool</th>${tools.map(t=>`<th><div class="flex items-center gap-12"><span class="tool-logo" style="width:38px;height:38px;font-size:17px;background:${t.color}22;color:${t.color}">${t.logo}</span>${t.name}</div></th>`).join('')}</tr>
+      ${row('Category', tools.map(t=>t.category))}
+      ${row('Rating', tools.map(t=>stars(t.rating)+` (${t.reviews.toLocaleString()})`))}
+      ${row('Pricing', tools.map(t=>pricingBadge(t.pricing)))}
+      ${row('Starting price', tools.map(t=>t.priceFrom))}
+      ${row('Best for', tools.map(t=>t.who))}
+      ${row('Key features', tools.map(t=>`<ul class="feature-list">${t.features.slice(0,4).map(f=>`<li>${f}</li>`).join('')}</ul>`))}
+      ${row('Strengths', tools.map(t=>`<ul class="pros-list">${t.pros.map(f=>`<li>${f}</li>`).join('')}</ul>`))}
+      ${row('Watch out for', tools.map(t=>`<ul class="cons-list">${t.cons.map(f=>`<li>${f}</li>`).join('')}</ul>`))}
+      ${row('Details', tools.map(t=>`<a class="btn btn-ghost btn-sm" href="#/tool?id=${t.id}">View page →</a>`))}
+    `;
+  }
+  [slotA,slotB,slotC].forEach(s=>s.addEventListener('change', render));
+  render();
+}
+
+const CATEGORY_PAGES = {
+  student: { title:"Student AI Tools", eyebrow:"For learners", p:"Everything you need to study smarter — homework helpers, flashcard generators, research tools and AI tutors.",
+    subs:[["Homework Helpers","Get unstuck on tricky problems and assignments.",["quizletai","wolfram","chatgpt"]],
+          ["Study Planners & Tutors","Stay on schedule with adaptive, patient AI guidance.",["khanmigo","notionai"]],
+          ["Summarizers & Notes","Turn long readings and lectures into clear notes.",["quillbot","notionai"]],
+          ["Research Tools","Find and understand academic sources fast.",["elicit","consensus","wolfram","perplexity"]]] },
+  creator: { title:"Creator AI Tools", eyebrow:"For creators", p:"Write faster, design better visuals, and produce video content without a full studio behind you.",
+    subs:[["Writing Tools","Draft, edit and polish words at speed.",["jasper","copyai","writesonic","grammarly"]],
+          ["Image Tools","Generate and refine original artwork and visuals.",["midjourney","dalle","leonardo","firefly","ideogram"]],
+          ["Video Tools","Turn ideas into footage, avatars and clips.",["runway","pika","synthesia","heygen"]],
+          ["Social Media Tools","Design and publish content people stop scrolling for.",["canva","gamma"]]] },
+  work: { title:"Work & Productivity", eyebrow:"For teams", p:"AI assistants for the office, meeting note-takers, and management tools that keep projects on track.",
+    subs:[["Office Assistants","AI that lives inside the docs and email you already use.",["copilot","notionai","gemini"]],
+          ["Meeting Tools","Capture decisions and action items automatically.",["copilot","notionai"]],
+          ["Management Tools","Plan, schedule and report on work without the busywork.",["clickupai","motion"]]] },
+  dev: { title:"Developer AI Tools", eyebrow:"For builders", p:"Pair-program with AI, squash bugs faster, and ship full apps without leaving the browser.",
+    subs:[["Coding Assistants","Inline completions and chat for everyday coding.",["ghcopilot","cursor","chatgpt"]],
+          ["Debugging Tools","Find and fix issues across your whole codebase.",["cursor","ghcopilot"]],
+          ["Developer Utilities","Build, host and deploy without extra setup.",["replitai","figmaai"]]] },
+};
+function pageCategory(qp){
+  const tag = qp.get('tag') || 'student';
+  const c = CATEGORY_PAGES[tag] || CATEGORY_PAGES.student;
+  return `
+  <section class="page-band"><div class="container">
+    <span class="eyebrow">${c.eyebrow}</span>
+    <h1>${c.title}</h1>
+    <p>${c.p}</p>
+  </div></section>
+  <main class="section"><div class="container">
+    ${c.subs.map((s,i)=>`
+      <div class="section-head" style="margin-top:${i?40:0}px;">
+        <div><h2 class="section-title" style="font-size:22px;">${s[0]}</h2><p class="section-sub">${s[1]}</p></div>
+      </div>
+      <div class="grid-3 mt-24" id="catgrid-${i}"></div>
+    `).join('')}
+  </div></main>`;
+}
+function afterCategory(qp){
+  const tag = qp.get('tag') || 'student';
+  const c = CATEGORY_PAGES[tag] || CATEGORY_PAGES.student;
+  c.subs.forEach((s,i)=> fillGrid(`catgrid-${i}`, s[2].map(toolById).filter(Boolean)));
+}
+
+function pageFavorites(){
+  return `
+  <section class="page-band"><div class="container">
+    <span class="eyebrow">Your universe</span><h1>My Collection</h1>
+    <p>Tools you've saved, plus what you've viewed recently — synced to this browser.</p>
+  </div></section>
+  <main class="section"><div class="container">
+    <div class="section-head"><h2 class="section-title" style="font-size:22px;">Saved favorites</h2></div>
+    <div class="grid-3" id="favGrid"></div>
+    <div class="empty-state hidden" id="favEmpty"><div class="ico">♡</div><p>No favorites yet. Tap the heart on any tool card to save it here.</p><a href="#/directory" class="btn btn-primary mt-16">Browse the directory</a></div>
+    <div class="section-head mt-40"><h2 class="section-title" style="font-size:22px;">Recently viewed</h2></div>
+    <div class="grid-3" id="recentGrid"></div>
+    <div class="empty-state hidden" id="recentEmpty"><div class="ico">🕘</div><p>Tools you open will show up here for quick access.</p></div>
+  </div></main>`;
+}
+function afterFavorites(){
+  const favTools = Favorites.get().map(toolById).filter(Boolean);
+  fillGrid('favGrid', favTools);
+  document.getElementById('favGrid').classList.toggle('hidden', favTools.length===0);
+  document.getElementById('favEmpty').classList.toggle('hidden', favTools.length>0);
+  const recentTools = RecentlyViewed.get().map(toolById).filter(Boolean);
+  fillGrid('recentGrid', recentTools);
+  document.getElementById('recentGrid').classList.toggle('hidden', recentTools.length===0);
+  document.getElementById('recentEmpty').classList.toggle('hidden', recentTools.length>0);
+}
+
+function pagePremium(){
+  return `
+  <section class="page-band text-center"><div class="container">
+    <span class="eyebrow" style="justify-content:center;">Unlock the full universe</span>
+    <h1>AI Universe Premium</h1>
+    <p style="margin:14px auto 0;">One membership for smarter recommendations, a personal AI toolbox, and first access to what's new.</p>
+  </div></section>
+  <main class="section"><div class="container">
+    <div class="grid-3" style="max-width:900px;margin:0 auto;align-items:stretch;">
+      <div class="pricing-card">
+        <h4 class="text-faint">FREE</h4><div class="price-num">$0<span>/mo</span></div>
+        <p class="text-dim" style="font-size:14px;">Browse and search the full directory.</p>
+        <ul class="pricing-feat"><li>Full tool directory access</li><li>Search & filters</li><li>Save favorites</li><li>Compare up to 3 tools</li></ul>
+        <a href="#/login" class="btn btn-ghost btn-block">Continue free</a>
+      </div>
+      <div class="pricing-card featured">
+        <h4 class="text-faint">PREMIUM</h4><div class="price-num">$15<span>/mo</span></div>
+        <p class="text-dim" style="font-size:14px;">Everything in Free, plus a smarter, personalized AI Universe.</p>
+        <ul class="pricing-feat"><li>Advanced AI recommendations</li><li>Personal AI toolbox & collections</li><li>Step-by-step AI workflow guides</li><li>Instant alerts for new tools</li><li>Exclusive curated tool collections</li></ul>
+        <button class="btn btn-primary btn-block" id="upgradeBtn">Upgrade to Premium</button>
+      </div>
+      <div class="pricing-card">
+        <h4 class="text-faint">TEAMS</h4><div class="price-num">Custom</div>
+        <p class="text-dim" style="font-size:14px;">For companies rolling out AI tools across departments.</p>
+        <ul class="pricing-feat"><li>Everything in Premium</li><li>Shared team collections</li><li>Usage & adoption insights</li><li>Priority support</li></ul>
+        <a href="#" class="btn btn-ghost btn-block">Contact sales</a>
+      </div>
+    </div>
+    <div class="section-head mt-40"><h2 class="section-title" style="font-size:22px;">What you unlock</h2></div>
+    <div class="grid-4">
+      <div class="panel"><div class="cat-icon">🎯</div><h4 class="mt-8">Smarter recommendations</h4><p class="text-dim mt-8" style="font-size:13.5px;">Tools matched to your role, goals and past saves.</p></div>
+      <div class="panel"><div class="cat-icon">🧰</div><h4 class="mt-8">Personal AI toolbox</h4><p class="text-dim mt-8" style="font-size:13.5px;">Organize tools into your own stacks and workflows.</p></div>
+      <div class="panel"><div class="cat-icon">🗺️</div><h4 class="mt-8">Workflow guides</h4><p class="text-dim mt-8" style="font-size:13.5px;">Step-by-step playbooks for real tasks, not just tool lists.</p></div>
+      <div class="panel"><div class="cat-icon">🔔</div><h4 class="mt-8">New tool alerts</h4><p class="text-dim mt-8" style="font-size:13.5px;">Be first to know when something new lands in the universe.</p></div>
+    </div>
+  </div></main>`;
+}
+function afterPremium(){
+  document.getElementById('upgradeBtn').addEventListener('click', ()=>{
+    const user = Auth.get();
+    if(!user){ go('/login'); return; }
+    Auth.setPremium(true);
+    alert('Demo upgrade complete — you are now a Premium member!');
+    go('/account');
+  });
+}
+
+function pageLogin(){
+  return `
+  <div class="container">
+    <div class="auth-shell panel reveal">
+      <div class="text-center">
+        <div class="logo-mark" style="margin:0 auto 16px;">✦</div>
+        <h2>Welcome to AI Universe</h2>
+        <p class="text-dim mt-8" style="font-size:14px;">Sign in to save tools, get recommendations and unlock Premium.</p>
+      </div>
+      <div class="flex gap-12 mt-24" style="justify-content:center;">
+        <button class="chip active" data-mode="login">Sign in</button>
+        <button class="chip" data-mode="signup">Create account</button>
+      </div>
+      <form id="authForm" class="mt-24">
+        <div class="form-row hidden" id="nameRow"><label>Full name</label><input class="input" id="name" placeholder="Ada Lovelace"></div>
+        <div class="form-row"><label>Email</label><input class="input" type="email" id="email" placeholder="you@example.com" required></div>
+        <div class="form-row"><label>Password</label><input class="input" type="password" id="password" placeholder="••••••••" required></div>
+        <button class="btn btn-primary btn-block" type="submit" id="submitBtn">Sign in</button>
+      </form>
+      <p class="text-faint text-center mt-16" style="font-size:12.5px;">This is a demo login — no real account is created, data stays only in your browser.</p>
+    </div>
+  </div>`;
+}
+function afterLogin(){
+  let mode='login';
+  const chips = document.querySelectorAll('.chip');
+  const nameRow = document.getElementById('nameRow');
+  const submitBtn = document.getElementById('submitBtn');
+  function setMode(m){ mode=m; chips.forEach(c=>c.classList.toggle('active', c.dataset.mode===m)); nameRow.classList.toggle('hidden', m!=='signup'); submitBtn.textContent = m==='signup' ? 'Create account' : 'Sign in'; }
+  chips.forEach(c=>c.addEventListener('click', ()=>setMode(c.dataset.mode)));
+  document.getElementById('authForm').addEventListener('submit', e=>{
+    e.preventDefault();
+    const name = document.getElementById('name').value || document.getElementById('email').value.split('@')[0];
+    const email = document.getElementById('email').value;
+    Auth.login(name, email);
+    go('/account');
+  });
+}
+
+function pageAccount(){
+  const user = Auth.get();
+  if(!user) return `<div class="section container empty-state"><div class="ico">🔒</div><p>You're not signed in.</p><a href="#/login" class="btn btn-primary mt-16">Sign in</a></div>`;
+  return `<div class="section container">
+    <div class="flex items-center gap-20" style="flex-wrap:wrap;">
+      <div class="tool-hero-logo" style="background:var(--grad-main);color:#08091a;">${user.name[0].toUpperCase()}</div>
+      <div><h1 style="font-size:26px;">${user.name}</h1><p class="text-faint">${user.email} · joined ${user.joined}</p></div>
+      <span class="badge ${user.premium?'badge-new':'badge-freemium'}" style="margin-left:auto;">${user.premium?'★ Premium member':'Free plan'}</span>
+    </div>
+    <div class="grid-3" style="grid-template-columns:1fr 1fr 1fr;margin-top:32px;">
+      <div class="stat-card"><div class="num">${Favorites.get().length}</div><div class="text-faint">Saved tools</div></div>
+      <div class="stat-card"><div class="num">${RecentlyViewed.get().length}</div><div class="text-faint">Recently viewed</div></div>
+      <div class="stat-card"><div class="num">${user.premium?'∞':'5'}</div><div class="text-faint">AI recommendations / mo</div></div>
+    </div>
+    <div class="panel mt-40">
+      ${user.premium ? `<h3>You're a Premium member ✦</h3><p class="text-dim mt-8">You have access to advanced recommendations, workflow guides and new tool alerts.</p><button class="btn btn-ghost mt-16" id="cancelBtn">Cancel Premium</button>`
+                     : `<h3>Upgrade to Premium</h3><p class="text-dim mt-8">Unlock personal recommendations, workflow guides and early access to new tools — $15/month.</p><a href="#/premium" class="btn btn-primary mt-16">View Premium →</a>`}
+    </div>
+    <div class="flex justify-between mt-24">
+      <a href="#/favorites" class="btn btn-ghost">View my collection →</a>
+      <button class="btn btn-ghost" id="logoutBtn">Sign out</button>
+    </div>
+  </div>`;
+}
+function afterAccount(){
+  document.getElementById('logoutBtn')?.addEventListener('click', ()=>{ Auth.logout(); go('/'); });
+  document.getElementById('cancelBtn')?.addEventListener('click', ()=>{ Auth.setPremium(false); render(); });
+}
+
+function pageAdmin(){
+  return `
+  <section class="page-band"><div class="container">
+    <span class="eyebrow">Internal</span><h1>Admin Panel</h1>
+    <p>Manage the AI Universe catalog — add tools, edit categories, and oversee members. Changes here are stored locally for this demo.</p>
+  </div></section>
+  <main class="section"><div class="container admin-layout">
+    <nav class="admin-side panel">
+      <a class="tab-link active" data-tab="overview">Overview</a>
+      <a class="tab-link" data-tab="tools">Manage Tools</a>
+      <a class="tab-link" data-tab="categories">Manage Categories</a>
+      <a class="tab-link" data-tab="users">Manage Users</a>
+    </nav>
+    <div>
+      <div class="tab-panel" id="panel-overview">
+        <div class="grid-4">
+          <div class="stat-card"><div class="num" id="statTools">0</div><div class="text-faint">Total tools</div></div>
+          <div class="stat-card"><div class="num" id="statCats">0</div><div class="text-faint">Categories</div></div>
+          <div class="stat-card"><div class="num" id="statUsers">0</div><div class="text-faint">Registered users (this browser)</div></div>
+          <div class="stat-card"><div class="num" id="statAvgRating">0</div><div class="text-faint">Average rating</div></div>
+        </div>
+      </div>
+      <div class="tab-panel hidden" id="panel-tools">
+        <div class="flex justify-between items-center" style="margin-bottom:18px;"><h3>All tools</h3><button class="btn btn-primary btn-sm" id="addToolBtn">+ Add tool</button></div>
+        <div class="panel" style="overflow-x:auto;padding:0;"><table class="admin-table" id="toolsTable"></table></div>
+      </div>
+      <div class="tab-panel hidden" id="panel-categories">
+        <div class="flex justify-between items-center" style="margin-bottom:18px;"><h3>Categories</h3><button class="btn btn-primary btn-sm" id="addCatBtn">+ Add category</button></div>
+        <div class="grid-3" id="catAdminGrid"></div>
+      </div>
+      <div class="tab-panel hidden" id="panel-users">
+        <h3>Users on this browser</h3>
+        <div class="panel mt-16" style="overflow-x:auto;padding:0;"><table class="admin-table" id="usersTable"></table></div>
+      </div>
+    </div>
+  </div></main>`;
+}
+function afterAdmin(){
+  const STORE_KEY='au_admin_tools', CAT_KEY='au_admin_cats';
+  let extraTools = JSON.parse(localStorage.getItem(STORE_KEY)||'[]');
+  let removedIds = JSON.parse(localStorage.getItem('au_admin_removed')||'[]');
+  let extraCats = JSON.parse(localStorage.getItem(CAT_KEY)||'[]');
+  function allTools(){ return [...TOOLS.filter(t=>!removedIds.includes(t.id)), ...extraTools]; }
+  function allCats(){ return [...CATEGORIES, ...extraCats]; }
+  function save(){ localStorage.setItem(STORE_KEY, JSON.stringify(extraTools)); localStorage.setItem('au_admin_removed', JSON.stringify(removedIds)); localStorage.setItem(CAT_KEY, JSON.stringify(extraCats)); }
+
+  document.querySelectorAll('.tab-link').forEach(link=>{
+    link.addEventListener('click', ()=>{
+      document.querySelectorAll('.tab-link').forEach(l=>l.classList.remove('active'));
+      link.classList.add('active');
+      document.querySelectorAll('.tab-panel').forEach(p=>p.classList.add('hidden'));
+      document.getElementById('panel-'+link.dataset.tab).classList.remove('hidden');
+    });
+  });
+  function renderOverview(){
+    const ts = allTools();
+    document.getElementById('statTools').textContent = ts.length;
+    document.getElementById('statCats').textContent = allCats().length;
+    document.getElementById('statUsers').textContent = Auth.get() ? 1 : 0;
+    document.getElementById('statAvgRating').textContent = (ts.reduce((s,t)=>s+t.rating,0)/ts.length || 0).toFixed(2);
+  }
+  function renderTools(){
+    const ts = allTools();
+    document.getElementById('toolsTable').innerHTML = `<tr><th>Tool</th><th>Category</th><th>Pricing</th><th>Rating</th><th></th></tr>
+      ${ts.map(t=>`<tr><td>${t.logo} ${t.name}</td><td>${t.category}</td><td>${t.pricing}</td><td>${t.rating.toFixed(1)}★</td><td><button class="btn btn-ghost btn-sm" data-remove="${t.id}">Remove</button></td></tr>`).join('')}`;
+    document.querySelectorAll('[data-remove]').forEach(btn=>btn.addEventListener('click', ()=>{
+      const id = btn.dataset.remove;
+      if(extraTools.find(t=>t.id===id)) extraTools = extraTools.filter(t=>t.id!==id); else removedIds.push(id);
+      save(); renderAll();
+    }));
+  }
+  function renderCats(){
+    document.getElementById('catAdminGrid').innerHTML = allCats().map(c=>`<div class="panel"><div class="cat-icon">${c.icon}</div><div class="cat-name mt-8">${c.name}</div><div class="text-faint" style="font-size:12.5px;">${c.desc}</div></div>`).join('');
+  }
+  function renderUsers(){
+    const u = Auth.get();
+    document.getElementById('usersTable').innerHTML = `<tr><th>Name</th><th>Email</th><th>Plan</th><th>Joined</th></tr>
+      ${u ? `<tr><td>${u.name}</td><td>${u.email}</td><td>${u.premium?'Premium':'Free'}</td><td>${u.joined}</td></tr>` : `<tr><td colspan="4" class="text-faint">No user signed in on this browser yet.</td></tr>`}`;
+  }
+  function renderAll(){ renderOverview(); renderTools(); renderCats(); renderUsers(); }
+  document.getElementById('addToolBtn').addEventListener('click', ()=>{
+    const name = prompt('Tool name?'); if(!name) return;
+    const category = prompt('Category?') || 'Writing';
+    const blurb = prompt('Short description?') || 'A new AI tool.';
+    const pricing = prompt('Pricing — Free, Freemium or Paid?') || 'Freemium';
+    const id = name.toLowerCase().replace(/[^a-z0-9]/g,'') + '-' + Date.now().toString(36).slice(-4);
+    extraTools.push({ id,name,maker:'Unknown',category,tags:[],logo:name[0].toUpperCase(),color:'#7c5cff',rating:4.0,reviews:0,pricing,
+      priceFrom: pricing==='Free'?'Free':'Contact for pricing', blurb, who:'Newly added — details coming soon.', features:['Details coming soon'],
+      pros:['Newly added'], cons:['Not yet reviewed'], alternatives:[], new:true, trending:false, weekly:false });
+    save(); renderAll();
+  });
+  document.getElementById('addCatBtn').addEventListener('click', ()=>{
+    const name = prompt('Category name?'); if(!name) return;
+    const icon = prompt('Emoji icon?') || '✦';
+    const desc = prompt('Short description?') || '';
+    extraCats.push({name,icon,desc}); save(); renderAll();
+  });
+  renderAll();
+}
+
+/* ============================================================
+   AI ASSISTANT — native in-house chat (free limit / premium unlimited)
+   ============================================================ */
+const ChatState = {
+  FREE_CODE_DAILY_LIMIT: 5, // free users get 5 code replies per day
+  CODE_PATTERN: /\b(code|function|bug|debug|error|exception|stack trace|compile|compiler|syntax|regex|api|script|python|javascript|typescript|java\b|c\+\+|c#|html|css|sql|array|loop|variable|class\b|algorithm|github|repo|programming|software|json|node\.?js|react|backend|frontend)\b/i,
+  messages: [
+    { role:'assistant', text:"Hey! 👋 I'm OmniSolve AI — your smart friend who can solve JEE problems, write and debug code, explain science, do complex math, and answer pretty much anything.\n\nPick a mode above to get started:\n🎓 JEE Solver — step-by-step Physics, Chemistry & Math\n💻 Coding — generate, debug, explain code\n🔢 Math — algebra, calculus, equations\n📚 Knowledge — facts, science, history\n\nIf you have Ollama installed locally, I'll use Qwen/Mistral for full AI answers. Otherwise I'll use my built-in tools for math, chemistry and facts. What do you need help with?" }
+  ],
+};
+function isCodeQuestion(text){ return ChatState.CODE_PATTERN.test(text); }
+const MATH_PATTERN = /(\d\s*[\+\-\*\/\^]\s*\d)|(solve|simplify|factor|derivative|differentiate|integral|integrate|equation)\b.*[a-z0-9]|[a-z]\s*=\s*[\d\-]|\b(sin|cos|tan|log|ln|sqrt)\s*\(/i;
+function isMathQuestion(text){ return MATH_PATTERN.test(text); }
+function codeKey(){ return 'au_chat_code_used_' + new Date().toISOString().slice(0,10); }
+function codeUsedToday(){ return parseInt(localStorage.getItem(codeKey())||'0',10); }
+function codeRemaining(){ return ChatState.FREE_CODE_DAILY_LIMIT - codeUsedToday(); }
+function chatIsPremium(){ const u=Auth.get(); return !!(u && u.premium); }
+function codeLimitReached(){ return !chatIsPremium() && codeRemaining()<=0; }
+
+function pageAssistant(){
+  return `
+  <style>
+  #omniWrap{display:flex;height:calc(100vh - 65px);overflow:hidden;background:var(--bg);}
+  #omniSidebar{width:240px;min-width:240px;background:var(--surface);border-right:1px solid var(--border);display:flex;flex-direction:column;padding:16px 12px;gap:4px;overflow-y:auto;transition:transform .25s;}
+  .os-section-label{font-size:10.5px;font-weight:700;letter-spacing:.08em;text-transform:uppercase;color:var(--text-faint);padding:14px 10px 6px;}
+  .os-mode{display:flex;align-items:center;gap:9px;padding:9px 11px;border-radius:10px;border:none;background:transparent;color:var(--text-dim);font-family:var(--font-body);font-size:13.5px;font-weight:500;cursor:pointer;text-align:left;width:100%;transition:.15s;}
+  .os-mode:hover{background:var(--surface-2);color:var(--text);}
+  .os-mode.active{background:rgba(124,92,255,.15);color:var(--text);border:1px solid rgba(124,92,255,.3);}
+  .os-mode .icon{font-size:15px;width:20px;text-align:center;flex-shrink:0;}
+  .os-mode .badge{margin-left:auto;font-size:10px;padding:2px 6px;border-radius:5px;background:rgba(124,92,255,.2);color:var(--violet);}
+  #omniStatus{margin-top:auto;padding:10px 12px;border-radius:10px;font-size:12px;background:var(--surface-2);border:1px solid var(--border);display:flex;align-items:center;gap:7px;color:var(--text-dim);}
+  .sdot{width:7px;height:7px;border-radius:50%;flex-shrink:0;background:var(--amber);}
+  .sdot.on{background:var(--green);}
+  #omniMain{flex:1;display:flex;flex-direction:column;overflow:hidden;}
+  #omniHeader{padding:12px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;gap:12px;background:var(--surface);flex-shrink:0;}
+  #omniModeTitle{font-weight:700;font-size:15px;}
+  #omniModeHint{font-size:12px;color:var(--text-dim);margin-left:auto;}
+  #omniChat{flex:1;overflow-y:auto;padding:20px 22px;display:flex;flex-direction:column;gap:18px;}
+  #omniChat::-webkit-scrollbar{width:4px;}
+  #omniChat::-webkit-scrollbar-thumb{background:var(--border);border-radius:2px;}
+  .os-msg{display:flex;flex-direction:column;max-width:82%;}
+  .os-msg.user{align-self:flex-end;align-items:flex-end;}
+  .os-msg.ai{align-self:flex-start;align-items:flex-start;}
+  .os-avatar{width:26px;height:26px;border-radius:7px;margin-bottom:5px;background:var(--grad-main);display:flex;align-items:center;justify-content:center;font-size:13px;}
+  .os-bubble{padding:12px 16px;border-radius:14px;font-size:14.5px;line-height:1.7;word-break:break-word;}
+  .os-msg.user .os-bubble{background:var(--grad-main);color:#08091a;border-bottom-right-radius:3px;}
+  .os-msg.ai .os-bubble{background:var(--surface-2);color:var(--text);border:1px solid var(--border);border-bottom-left-radius:3px;}
+  .os-time{font-size:11px;color:var(--text-faint);margin-top:3px;padding:0 3px;}
+  .os-mode-tag{display:inline-block;font-size:10.5px;padding:2px 8px;border-radius:6px;background:rgba(124,92,255,.18);color:var(--violet);margin-bottom:5px;font-weight:600;}
+  .os-bubble pre{background:rgba(0,0,0,.4);border-radius:8px;padding:13px 15px;overflow-x:auto;font-family:var(--font-mono);font-size:12.5px;margin:9px 0;border:1px solid rgba(255,255,255,.06);line-height:1.6;white-space:pre;}
+  .os-bubble code{font-family:var(--font-mono);font-size:12.5px;background:rgba(124,92,255,.15);color:#b4a7ff;padding:2px 5px;border-radius:4px;}
+  .os-bubble pre code{background:transparent;padding:0;color:#c8d8ff;}
+  .os-bubble strong{color:#c8c0ff;}
+  .os-bubble .step{background:rgba(124,92,255,.08);border-left:3px solid var(--violet);padding:8px 12px;border-radius:5px;margin:6px 0;font-size:14px;}
+  .os-bubble .ans{background:rgba(61,220,151,.1);border:1px solid rgba(61,220,151,.25);border-radius:8px;padding:9px 13px;margin:8px 0;color:var(--green);font-weight:700;}
+  .os-bubble ul,.os-bubble ol{padding-left:18px;margin:5px 0;}
+  .os-bubble li{margin:3px 0;}
+  .os-bubble h3{font-size:15px;font-weight:700;margin:10px 0 4px;color:#c8c0ff;}
+  .os-bubble table{width:100%;border-collapse:collapse;font-size:13.5px;margin:8px 0;}
+  .os-bubble th{background:rgba(124,92,255,.15);padding:7px 10px;text-align:left;}
+  .os-bubble td{padding:7px 10px;border-bottom:1px solid var(--border);}
+  .os-source{display:inline-flex;align-items:center;gap:5px;margin-top:9px;font-size:12px;color:var(--violet);opacity:.8;}
+  .os-typing{display:flex;gap:5px;align-items:center;padding:13px 17px;}
+  .os-dot{width:7px;height:7px;border-radius:50%;background:var(--violet);animation:osdot .9s infinite;}
+  .os-dot:nth-child(2){animation-delay:.15s;}.os-dot:nth-child(3){animation-delay:.3s;}
+  @keyframes osdot{0%,80%,100%{transform:translateY(0);opacity:.5}40%{transform:translateY(-5px);opacity:1}}
+  #omniInputBar{padding:12px 18px;border-top:1px solid var(--border);background:var(--surface);flex-shrink:0;}
+  #omniInputWrap{display:flex;gap:8px;align-items:flex-end;background:var(--surface-2);border:1px solid var(--border);border-radius:14px;padding:8px 10px;transition:.2s;}
+  #omniInputWrap:focus-within{border-color:rgba(124,92,255,.45);box-shadow:0 0 0 3px rgba(124,92,255,.1);}
+  #omniImgPreview{display:none;flex-direction:row;gap:8px;padding:0 0 8px;flex-wrap:wrap;}
+  .omni-thumb{position:relative;}
+  .omni-thumb img{width:56px;height:56px;object-fit:cover;border-radius:7px;border:1px solid var(--border);}
+  .omni-thumb button{position:absolute;top:-5px;right:-5px;width:17px;height:17px;border-radius:50%;background:var(--coral);border:none;color:#fff;font-size:10px;cursor:pointer;display:flex;align-items:center;justify-content:center;}
+  #omniTextInput{flex:1;background:transparent;border:none;outline:none;color:var(--text);font-family:var(--font-body);font-size:14.5px;resize:none;max-height:130px;min-height:22px;line-height:1.5;padding:3px 0;}
+  #omniTextInput::placeholder{color:var(--text-faint);}
+  .os-ibtn{width:33px;height:33px;border-radius:8px;border:none;background:transparent;color:var(--text-dim);cursor:pointer;font-size:16px;display:flex;align-items:center;justify-content:center;transition:.15s;}
+  .os-ibtn:hover{background:var(--surface);color:var(--text);}
+  #omniSendBtn{width:35px;height:35px;border-radius:9px;border:none;background:var(--violet);color:#fff;cursor:pointer;font-size:15px;display:flex;align-items:center;justify-content:center;transition:.15s;flex-shrink:0;}
+  #omniSendBtn:hover{background:#6a4eff;transform:scale(1.05);}
+  #omniSendBtn:disabled{background:var(--text-faint);cursor:default;transform:none;}
+  #omniPromptPanel{display:none;flex:1;flex-direction:column;padding:22px 24px;overflow-y:auto;gap:14px;}
+  .pb-label{font-size:13px;font-weight:600;color:var(--text-dim);margin-bottom:5px;}
+  .pb-input,.pb-textarea{width:100%;background:var(--surface-2);border:1px solid var(--border);border-radius:10px;padding:10px 14px;color:var(--text);font-family:var(--font-body);font-size:14px;outline:none;transition:.2s;}
+  .pb-input:focus,.pb-textarea:focus{border-color:rgba(124,92,255,.5);}
+  .pb-textarea{resize:vertical;min-height:80px;}
+  #pbResult{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:18px;font-size:13.5px;line-height:1.7;display:none;white-space:pre-wrap;margin-top:10px;}
+  #omniMemPanel{display:none;flex:1;flex-direction:column;padding:22px 24px;gap:14px;overflow-y:auto;}
+  .mem-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:16px 18px;}
+  .mem-card h3{font-size:14px;font-weight:700;margin-bottom:8px;}
+  #omniWelcome{flex:1;overflow-y:auto;padding:28px 22px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;}
+  .ow-title{font-size:24px;font-weight:800;background:var(--grad-main);-webkit-background-clip:text;-webkit-text-fill-color:transparent;}
+  .ow-sub{font-size:14px;color:var(--text-dim);max-width:440px;line-height:1.6;}
+  .ow-grid{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:520px;width:100%;margin-top:6px;}
+  .ow-card{background:var(--surface-2);border:1px solid var(--border);border-radius:12px;padding:13px 15px;cursor:pointer;text-align:left;font-family:var(--font-body);font-size:13px;color:var(--text-dim);transition:.15s;line-height:1.4;}
+  .ow-card:hover{border-color:rgba(124,92,255,.45);color:var(--text);background:rgba(124,92,255,.06);}
+  .ow-card strong{display:block;font-size:12px;color:var(--text);margin-bottom:3px;}
+  #omniSidebarToggle{display:none;background:none;border:none;color:var(--text);font-size:20px;cursor:pointer;padding:4px;}
+  @media(max-width:680px){
+    #omniSidebar{position:fixed;left:0;top:0;bottom:0;z-index:200;transform:translateX(-110%);}
+    #omniSidebar.open{transform:translateX(0);}
+    #omniSidebarToggle{display:flex;}
+    .ow-grid{grid-template-columns:1fr;}
+    .os-msg{max-width:94%;}
+    #omniModeHint{display:none;}
+  }
+  </style>
+  <div id="omniWrap">
+    <aside id="omniSidebar">
+      <div style="display:flex;align-items:center;gap:9px;padding:2px 6px 16px;border-bottom:1px solid var(--border);margin-bottom:6px;">
+        <div style="width:32px;height:32px;border-radius:9px;background:var(--grad-main);display:flex;align-items:center;justify-content:center;font-size:16px;flex-shrink:0;">🧠</div>
+        <div><div style="font-weight:700;font-size:13.5px;">OmniSolve AI</div><div style="font-size:10.5px;color:var(--text-faint);">Smart AI Platform</div></div>
+      </div>
+      <div class="os-section-label">AI Modes</div>
+      <button class="os-mode active" data-mode="general" data-title="General Chat" data-hint="Ask anything — friendly & fast"><span class="icon">💬</span>General Chat</button>
+      <button class="os-mode" data-mode="jee" data-title="JEE Solver" data-hint="Physics · Chemistry · Maths"><span class="icon">🎓</span>JEE Solver<span class="badge">IIT</span></button>
+      <button class="os-mode" data-mode="coding" data-title="Coding Lab" data-hint="Generate · Debug · Explain"><span class="icon">💻</span>Coding Lab</button>
+      <button class="os-mode" data-mode="math" data-title="Math Solver" data-hint="Algebra · Calculus · Equations"><span class="icon">🔢</span>Math Solver</button>
+      <button class="os-mode" data-mode="knowledge" data-title="Knowledge" data-hint="Science · History · Facts"><span class="icon">📚</span>Knowledge</button>
+      <button class="os-mode" data-mode="image" data-title="Image Solver" data-hint="Upload photo — solve instantly"><span class="icon">🖼️</span>Image Solver</button>
+      <div class="os-section-label">Tools</div>
+      <button class="os-mode" data-mode="prompt" data-title="Prompt Builder" data-hint="Generate complete AI prompts"><span class="icon">✍️</span>Prompt Builder</button>
+      <button class="os-mode" data-mode="memory" data-title="Memory" data-hint="Your saved context & history"><span class="icon">🧩</span>Memory</button>
+      <div id="omniStatus"><div class="sdot on" id="omniDot"></div><span id="omniStatusTxt">AI ready</span></div>
+    </aside>
+    <div id="omniMain">
+      <div id="omniHeader">
+        <button id="omniSidebarToggle" onclick="document.getElementById('omniSidebar').classList.toggle('open')">☰</button>
+        <div><div id="omniModeTitle">General Chat</div></div>
+        <div id="omniModeHint">Ask anything — friendly & fast</div>
+      </div>
+      <div id="omniWelcome">
+        <div style="font-size:48px;">🧠</div>
+        <div class="ow-title">OmniSolve AI</div>
+        <div class="ow-sub">Your smart AI platform — solves JEE, writes code, explains anything, answers every question.</div>
+        <div class="ow-grid" id="omniSuggestions"></div>
+      </div>
+      <div id="omniChat" style="display:none;"></div>
+      <div id="omniPromptPanel">
+        <div style="font-size:18px;font-weight:800;margin-bottom:4px;">✍️ Prompt Builder</div>
+        <div style="font-size:13px;color:var(--text-dim);margin-bottom:14px;">Describe what you want to build — get a complete, ready-to-use AI prompt.</div>
+        <div class="pb-label">What do you want to create?</div>
+        <textarea class="pb-textarea" id="pbIdea" rows="3" placeholder="e.g. I want to build an e-commerce website with React and Node.js…"></textarea>
+        <div class="pb-label" style="margin-top:10px;">Audience / Use case (optional)</div>
+        <input class="pb-input" id="pbAudience" placeholder="e.g. students, developers, small businesses…">
+        <div class="pb-label" style="margin-top:10px;">Style</div>
+        <div style="display:flex;gap:12px;flex-wrap:wrap;font-size:13px;">
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="radio" name="pbStyle" value="detailed" checked> Detailed</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="radio" name="pbStyle" value="concise"> Concise</label>
+          <label style="display:flex;align-items:center;gap:5px;cursor:pointer;"><input type="radio" name="pbStyle" value="technical"> Technical</label>
+        </div>
+        <button class="btn btn-primary" id="pbGenBtn" style="margin-top:14px;width:100%;">Generate Prompt ✨</button>
+        <div id="pbResult"></div>
+        <button id="pbCopyBtn" class="btn btn-ghost btn-sm" style="display:none;margin-top:8px;">Copy Prompt</button>
+      </div>
+      <div id="omniMemPanel">
+        <div style="font-size:18px;font-weight:800;margin-bottom:4px;">🧩 Memory</div>
+        <div style="font-size:13px;color:var(--text-dim);margin-bottom:16px;">OmniSolve remembers your preferences to give better personalised answers.</div>
+        <div class="mem-card">
+          <h3>Memory Settings</h3>
+          <label style="display:flex;align-items:center;gap:10px;cursor:pointer;font-size:14px;"><input type="checkbox" id="memToggle" style="width:16px;height:16px;"> Enable memory across sessions</label>
+        </div>
+        <div class="mem-card" style="margin-top:8px;">
+          <h3>Custom Instructions</h3>
+          <textarea class="pb-textarea" id="memInstructions" rows="3" placeholder="e.g. I am a JEE 2026 student. Explain things step by step. I prefer Python for coding."></textarea>
+          <button class="btn btn-primary btn-sm" id="memSaveBtn" style="margin-top:10px;">Save Instructions</button>
+        </div>
+        <div class="mem-card" style="margin-top:8px;">
+          <h3>Saved Memories</h3>
+          <div id="memList"><div style="color:var(--text-faint);font-size:13px;">No memories saved yet.</div></div>
+          <button class="btn btn-ghost btn-sm" id="memClearBtn" style="margin-top:10px;color:var(--coral);">Clear All Memory</button>
+        </div>
+      </div>
+      <div id="omniInputBar">
+        <div id="omniInputWrap">
+          <div style="flex:1;display:flex;flex-direction:column;">
+            <div id="omniImgPreview"></div>
+            <textarea id="omniTextInput" rows="1" placeholder="Ask anything…"></textarea>
+          </div>
+          <div style="display:flex;align-items:center;gap:5px;flex-shrink:0;">
+            <input type="file" id="omniFileInput" accept="image/*" multiple style="display:none">
+            <button class="os-ibtn" onclick="document.getElementById('omniFileInput').click()">📎</button>
+            <button id="omniSendBtn">➤</button>
+          </div>
+        </div>
+        <div style="text-align:center;font-size:11px;color:var(--text-faint);margin-top:6px;">Enter to send · Shift+Enter for new line · 📎 upload a photo of your question</div>
+      </div>
+    </div>
+  </div>`;
+}
+// Normalizes common natural-language math phrasing into something math.js can parse.
+function normalizeMathText(text){
+  return text
+    .replace(/×/g,'*').replace(/÷/g,'/').replace(/²/g,'^2').replace(/³/g,'^3')
+    .replace(/\bsquare root of\b/gi,'sqrt')
+    .replace(/\bsquared\b/gi,'^2')
+    .replace(/\bcubed\b/gi,'^3')
+    .replace(/\bplus\b/gi,'+').replace(/\bminus\b/gi,'-')
+    .replace(/\btimes\b/gi,'*').replace(/\bdivided by\b/gi,'/')
+    .trim();
+}
+
+// Numerically fits a polynomial of given degree (1 = linear, 2 = quadratic) to an
+// expression of x by sampling it at degree+1 points, then solves it exactly.
+// This lets us solve any linear or quadratic equation without a symbolic CAS.
+function solveEquation(lhsExpr, rhsExpr){
+  const f = x => math.evaluate(`(${lhsExpr})-(${rhsExpr})`, {x});
+  const samples = [-1,0,1,2].map(x => ({x, y:f(x)}));
+  // Try linear first: y = a*x + b
+  const a1 = samples[2].y - samples[1].y; // f(1)-f(0)
+  const b1 = samples[1].y; // f(0)
+  const isLinear = Math.abs((samples[3].y - samples[2].y) - a1) < 1e-9; // constant slope check
+  if(isLinear){
+    if(Math.abs(a1) < 1e-12) return null;
+    const root = -b1/a1;
+    return { type:'linear', roots:[round6(root)] };
+  }
+  // Fit quadratic y = a*x^2 + b*x + c using f(-1), f(0), f(1)
+  const fm1=samples[0].y, f0=samples[1].y, f1=samples[2].y;
+  const a = (fm1 + f1)/2 - f0;
+  const b = (f1 - fm1)/2;
+  const c = f0;
+  if(Math.abs(a) < 1e-12) return null; // not actually quadratic, give up gracefully
+  const disc = b*b - 4*a*c;
+  if(disc < 0){
+    const re = round6(-b/(2*a)), im = round6(Math.sqrt(-disc)/(2*a));
+    return { type:'quadratic-complex', roots:[`${re} + ${im}i`, `${re} - ${im}i`] };
+  }
+  const sq = Math.sqrt(disc);
+  return { type:'quadratic', roots:[round6((-b+sq)/(2*a)), round6((-b-sq)/(2*a))] };
+}
+function round6(n){ return Math.round(n*1e6)/1e6; }
+
+// Solves math problems for real, using math.js (a genuine math engine — exact
+// computation, not a guess): plain arithmetic, equations with one variable
+// (linear or quadratic), derivatives, and algebraic simplification.
+function solveMathProblem(rawText){
+  const text = normalizeMathText(rawText);
+  try{
+    // Derivative requests: "derivative of x^2+3x", "differentiate sin(x)"
+    const derivMatch = text.match(/(?:derivative of|differentiate)\s+(.+)/i);
+    if(derivMatch){
+      const expr = derivMatch[1].replace(/\?+$/,'').trim();
+      const result = math.derivative(expr, 'x').toString();
+      return `The derivative of ${expr} with respect to x is:\n\nd/dx [${expr}] = ${result}`;
+    }
+    // Simplify / factor / expand requests
+    const simpMatch = text.match(/(?:simplify|factor|expand)\s+(.+)/i);
+    if(simpMatch){
+      const expr = simpMatch[1].replace(/\?+$/,'').trim();
+      const result = math.simplify(expr).toString();
+      return `Simplified:\n\n${expr} = ${result}`;
+    }
+    // Equation with an x (or X) variable: solve for x
+    if(/=/.test(text) && /[xX]/.test(text)){
+      const [lhsRaw, rhsRaw] = text.split('=');
+      const lhs = lhsRaw.replace(/[xX]/g,'x').replace(/solve(\s+for\s+x)?:?/i,'').trim();
+      const rhs = rhsRaw.replace(/[xX]/g,'x').replace(/\?+$/,'').trim();
+      const solved = solveEquation(lhs, rhs);
+      if(solved && solved.roots.length===1) return `Solving ${lhs} = ${rhs} for x:\n\nx = ${solved.roots[0]}`;
+      if(solved && solved.roots.length===2) return `Solving ${lhs} = ${rhs} for x (quadratic):\n\nx = ${solved.roots[0]}  or  x = ${solved.roots[1]}`;
+      // fall through to plain evaluation attempt below if equation solving didn't apply
+    }
+    // Plain expression / arithmetic, including sqrt, trig, logs, percentages, etc.
+    const exprMatch = text.match(/(?:solve|calculate|compute|evaluate|what is|what's)?\s*:?\s*(.+)/i);
+    const expr = (exprMatch ? exprMatch[1] : text).replace(/\?+$/,'').trim();
+    const value = math.evaluate(expr);
+    const formatted = (typeof value === 'number') ? math.format(value, {precision:10}) : value.toString();
+    return `${expr} = ${formatted}`;
+  } catch(err){
+    return null; // signals "couldn't solve" so caller can fall back gracefully
+  }
+}
+
+// ---- Math solving (free, local, via math.js — already loaded in <head>) ----
+function looksLikeMath(q){
+  const hasMathChars = /[0-9].*[+\-*/^=].*[0-9]|sqrt|derivative|integral|sin\(|cos\(|tan\(|log\(/i.test(q);
+  const isWordProblem = /\b(train|apples|cost|age|miles|hours|workers|tank|speed of (a|the) (car|train))\b/i.test(q) && !/^[0-9x+\-*/^=().\s]+$/.test(q);
+  return hasMathChars && !isWordProblem;
+}
+function trySolveMath(q){
+  try{
+    let expr = q.replace(/\?+$/,'').trim();
+    // "solve 2x+3=7" or "solve for x: 2x+3=7"
+    const eqMatch = expr.match(/(?:solve(?: for [a-z])?:?\s*)?([^=]+)=([^=]+)$/i);
+    if(/solve/i.test(expr) && eqMatch){
+      const lhs = eqMatch[1].trim(), rhs = eqMatch[2].trim();
+      const variable = (expr.match(/[a-z]/i) || ['x'])[0];
+      // bisection-free symbolic solve via math.js algebra isn't built in, so use math.js's
+      // simplify + a basic linear solver for ax+b=c forms, which covers most "easy" algebra.
+      const node = math.parse(`(${lhs}) - (${rhs})`);
+      const simplified = math.simplify(node).toString();
+      // try simple numeric root-finding for the single-variable equation over a wide range
+      const f = (x)=> math.evaluate(simplified, {[variable]: x});
+      let root = null;
+      for(let x=-1000; x<=1000; x+=0.5){
+        try{
+          const y1=f(x), y2=f(x+0.5);
+          if(isFinite(y1) && isFinite(y2) && y1*y2<=0){
+            // refine with a few bisection steps
+            let lo=x, hi=x+0.5;
+            for(let i=0;i<40;i++){
+              const mid=(lo+hi)/2;
+              if(f(lo)*f(mid)<=0) hi=mid; else lo=mid;
+            }
+            root = (lo+hi)/2;
+            break;
+          }
+        } catch(e){}
+      }
+      if(root!==null){
+        return { text: `${variable} = ${math.round(root,6)}\n\n(solved ${simplified} = 0)`, link: null };
+      }
+    }
+    // direct evaluation: "12*7+3", "sqrt(144)", "derivative of x^3", "integrate 2x"
+    const derivMatch = expr.match(/derivative of (.+)/i);
+    if(derivMatch){
+      const result = math.derivative(derivMatch[1], 'x').toString();
+      return { text: `d/dx[${derivMatch[1]}] = ${result}`, link: null };
+    }
+    const result = math.evaluate(expr);
+    if(result !== undefined && typeof result !== 'function'){
+      return { text: `${expr} = ${math.format(result, {precision:10})}`, link: null };
+    }
+  } catch(e){ /* not a clean math expression — fall through to other lookups */ }
+  return null;
+}
+
+// ---- Chemistry lookups via PubChem (free, keyless) ----
+async function tryChemistry(q){
+  const m = q.match(/\b(molar mass|molecular weight|formula|structure)\s+(?:of\s+)?([a-z0-9\s]+)/i);
+  if(!m) return null;
+  const compound = m[2].trim();
+  try{
+    const res = await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(compound)}/property/MolecularFormula,MolecularWeight,IUPACName/JSON`);
+    if(!res.ok) return null;
+    const data = await res.json();
+    const props = data?.PropertyTable?.Properties?.[0];
+    if(!props) return null;
+    return {
+      text: `${compound}: formula ${props.MolecularFormula}, molecular weight ${props.MolecularWeight} g/mol${props.IUPACName ? `, IUPAC name: ${props.IUPACName}` : ''}`,
+      link: `https://pubchem.ncbi.nlm.nih.gov/#query=${encodeURIComponent(compound)}`
+    };
+  } catch(e){ return null; }
+}
+
+// Real symbolic math solving — runs entirely in the browser via nerdamer/mathjs.
+// Handles arithmetic, algebraic simplification, linear/quadratic equations,
+// derivatives and integrals. Free, keyless, no AI guessing involved — these
+// are exact computed results. Returns null if the input isn't math it can parse.
+function solveMath(raw){
+  const q = raw.trim();
+  try{
+    // Derivative: "derivative of x^2", "differentiate sin(x)", "d/dx x^3"
+    let m = q.match(/(?:derivative of|differentiate)\s+(.+)/i) || q.match(/d\/dx\s*\(?(.+?)\)?$/i);
+    if(m){
+      const result = nerdamer.diff(m[1].trim()).toString();
+      return `The derivative is:\n\n${m[1].trim()} → ${result}`;
+    }
+    // Integral: "integral of x^2", "integrate cos(x)"
+    m = q.match(/(?:integral of|integrate)\s+(.+)/i);
+    if(m){
+      const result = nerdamer.integrate(m[1].trim()).toString();
+      return `The integral is:\n\n∫ ${m[1].trim()} dx = ${result} + C`;
+    }
+    // Equation solving: contains "=" and a variable, e.g. "2x + 3 = 7" or "solve x^2-4=0"
+    m = q.match(/(?:solve)?\s*([^=]+=[^=]+)/i);
+    if(m && /=/.test(m[1]) && /[a-z]/i.test(m[1])){
+      const eqn = m[1].replace(/solve/i,'').trim();
+      const varMatch = eqn.match(/[a-z]/i);
+      const variable = varMatch ? varMatch[0] : 'x';
+      const solutions = nerdamer.solveEquations(eqn, variable);
+      const list = Array.isArray(solutions) ? solutions.map(s=>s.toString()) : [solutions.toString()];
+      return `Solving ${eqn} for ${variable}:\n\n${variable} = ${list.join('  or  ')}`;
+    }
+    // Simplify / factor request
+    m = q.match(/(?:simplify|factor)\s+(.+)/i);
+    if(m){
+      const fn = /factor/i.test(q) ? 'factor' : 'expand';
+      const result = nerdamer(m[1].trim())[fn]().toString();
+      return `Result:\n\n${m[1].trim()} = ${result}`;
+    }
+    // Plain arithmetic/algebraic expression — try direct evaluation
+    const cleaned = q.replace(/^(what is|what's|calculate|compute|evaluate)\s+/i,'').replace(/\?+$/,'').trim();
+    const evaluated = math.evaluate(cleaned);
+    if(evaluated !== undefined && typeof evaluated !== 'function'){
+      return `${cleaned} = ${evaluated}`;
+    }
+  } catch(e){
+    try{
+      // Fallback to nerdamer for algebraic simplification if mathjs failed
+      const cleaned = q.replace(/^(what is|what's|calculate|compute|evaluate)\s+/i,'').replace(/\?+$/,'').trim();
+      const result = nerdamer(cleaned).evaluate().toString();
+      return `${cleaned} = ${result}`;
+    } catch(e2){ return null; }
+  }
+  return null;
+}
+
+
+// Strips filler words so "what is the capital of France" -> "capital of France"
+// for a cleaner Wikipedia/DuckDuckGo lookup.
+function extractSearchTerm(q){
+  return q.replace(/^(what is|what are|who is|who was|who are|tell me about|explain|define|what's|how does|how do|why is|why does)\s+/i,'')
+           .replace(/\?+$/,'').trim() || q;
+}
+
+async function tryWikipedia(term){
+  const search = await fetch('https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&format=json&search=' + encodeURIComponent(term));
+  if(!search.ok) return null;
+  const [, titles] = await search.json();
+  if(!titles || !titles.length) return null;
+  const summaryRes = await fetch('https://en.wikipedia.org/api/rest_v1/page/summary/' + encodeURIComponent(titles[0]));
+  if(!summaryRes.ok) return null;
+  const data = await summaryRes.json();
+  if(!data.extract) return null;
+  return { text: data.extract, link: data.content_urls?.desktop?.page || googleSearchUrl(term) };
+}
+
+async function tryDuckDuckGo(term){
+  const res = await fetch('https://api.duckduckgo.com/?format=json&no_html=1&skip_disambig=1&q=' + encodeURIComponent(term));
+  if(!res.ok) return null;
+  const data = await res.json();
+  const text = data.AbstractText || data.Answer || (data.RelatedTopics && data.RelatedTopics[0] && data.RelatedTopics[0].Text);
+  if(!text) return null;
+  return { text, link: data.AbstractURL || googleSearchUrl(term) };
+}
+
+// Free, keyless lookup chain: Wikipedia first (best for factual/topic questions),
+// then DuckDuckGo Instant Answers, then a plain Google-search link as last resort.
+// No backend, no API key, no cost — but quality is limited to what these two
+// free public endpoints can answer (facts/definitions, not open-ended reasoning).
+async function freeWebAnswer(question){
+  if(looksLikeMath(question)){
+    const mathResult = trySolveMath(question);
+    if(mathResult) return mathResult;
+  }
+  const chem = await tryChemistry(question);
+  if(chem) return chem;
+  const term = extractSearchTerm(question);
+  try{
+    const wiki = await tryWikipedia(term);
+    if(wiki) return wiki;
+  } catch(e){ /* ignore and fall through */ }
+  try{
+    const ddg = await tryDuckDuckGo(term);
+    if(ddg) return ddg;
+  } catch(e){ /* ignore and fall through */ }
+  return {
+    text: "I couldn't find a quick factual answer for that with the free tools. Tap below to see full results on Google.",
+    link: googleSearchUrl(question)
+  };
+}
+
+/* ============================================================
+   OMNISOLVE AI — Brain
+   Priority chain per mode:
+   1. Ollama local AI (Qwen/Mistral) — full intelligence, free
+   2. Math engine (mathjs + nerdamer) — exact symbolic computation
+   3. PubChem — chemistry lookups
+   4. Wikipedia — factual knowledge
+   5. DuckDuckGo — instant answers
+   6. Google search link — last resort
+   ============================================================ */
+
+const OmniMode = {
+  current: 'general',
+  descriptions: {
+    general: '💬 General mode — Ask me anything. I\'ll answer like a smart, helpful friend.',
+    jee:     '🎓 JEE Solver — I\'m your IIT professor. Share any Physics, Chemistry or Math problem.',
+    coding:  '💻 Coding Lab — Share any code problem, bug, or project idea. I\'ll solve it step by step.',
+    knowledge:'📚 Knowledge mode — Factual questions, science, history, geography, current concepts.',
+    math:    '🔢 Math mode — Arithmetic, Algebra, Calculus, Equations, Derivatives, Integrals.',
+  },
+  models: {
+    general:  'mistral',
+    jee:      'qwen2.5',
+    coding:   'qwen2.5',
+    knowledge:'qwen2.5',
+    math:     'qwen2.5',
+  },
+  systemPrompts: {
+    general: `You are OmniSolve AI, a friendly and intelligent assistant. Behave like a smart, helpful friend — not a robot. Use simple language. Be encouraging and warm. Keep answers concise but complete. Never say "I cannot answer that." Instead say "Let me help you figure it out." Adjust your explanation level based on the question.`,
+
+    jee: `You are OmniSolve AI acting as an expert IIT professor and JEE coach. For every problem:
+1. Identify the topic and concept
+2. State the relevant formula(s) clearly
+3. Solve step-by-step, showing all working
+4. Box the final answer
+5. Give a quick shortcut or trick if one exists
+6. Mention difficulty level: Easy / Medium / Hard / JEE Advanced
+
+Cover: Physics (Mechanics, Waves, Thermodynamics, Electricity, Magnetism, Optics, Modern Physics), Chemistry (Physical, Organic, Inorganic), Mathematics (Algebra, Calculus, Geometry, Probability, Trigonometry). Be thorough but clear.`,
+
+    coding: `You are OmniSolve AI acting as a senior software engineer and coding mentor. Support: Python, Java, C, C++, JavaScript, TypeScript, React, Next.js, Node.js, SQL, HTML, CSS and more.
+For every coding question:
+1. Briefly explain your approach first
+2. Write clean, well-commented code
+3. Explain what each key part does
+4. Point out any common mistakes
+5. Suggest improvements if relevant
+Always write working, runnable code. Format code in proper code blocks.`,
+
+    knowledge: `You are OmniSolve AI, a knowledgeable assistant for factual questions. Cover: science, history, geography, technology, current concepts, everyday questions. Always clearly separate: known facts vs opinions vs uncertain info. Cite sources when possible. Keep explanations clear and engaging.`,
+
+    math: `You are OmniSolve AI, an expert mathematics tutor. For every math problem:
+1. Identify the type (arithmetic, algebra, calculus, geometry, etc.)
+2. Show the formula used
+3. Solve step by step
+4. Verify the answer
+5. Mention the concept for learning
+Handle: basic arithmetic, algebra, linear/quadratic equations, derivatives, integrals, trigonometry, logarithms, probability, statistics, matrices. Show all working clearly.`,
+  }
+};
+
+let ollamaAvailable = null; // null=unknown, true=yes, false=no
+
+async function checkOllama(){
+  try{
+    const r = await fetch('http://localhost:11434/api/tags',{signal:AbortSignal.timeout(2000)});
+    if(r.ok){
+      ollamaAvailable = true;
+      document.getElementById('ollamaStatus').style.display='block';
+      document.getElementById('ollamaOffline').style.display='none';
+      return true;
+    }
+  } catch(e){}
+  ollamaAvailable = false;
+  document.getElementById('ollamaStatus').style.display='none';
+  document.getElementById('ollamaOffline').style.display='block';
+  return false;
+}
+
+async function askOllama(userText, mode, history){
+  const model = OmniMode.models[mode] || 'mistral';
+  const systemPrompt = OmniMode.systemPrompts[mode] || OmniMode.systemPrompts.general;
+  document.getElementById('modelLabel').textContent = `Model: ${model} (local Ollama)`;
+
+  // Build message history for context (last 10 turns)
+  const msgs = history.slice(-10).map(m=>({
+    role: m.role === 'user' ? 'user' : 'assistant',
+    content: m.text || ''
+  }));
+  // Make sure last message is the current one
+  if(!msgs.length || msgs[msgs.length-1].content !== userText){
+    msgs.push({role:'user', content: userText});
+  }
+
+  const res = await fetch('http://localhost:11434/api/chat',{
+    method:'POST',
+    headers:{'Content-Type':'application/json'},
+    signal: AbortSignal.timeout(60000),
+    body: JSON.stringify({
+      model,
+      stream: false,
+      messages:[{role:'system', content: systemPrompt}, ...msgs]
+    })
+  });
+  if(!res.ok) throw new Error('Ollama error '+res.status);
+  const data = await res.json();
+  return data.message?.content || data.response || '';
+}
+
+async function ocrImage(dataUrl){
+  if(typeof Tesseract === 'undefined') return null;
+  try{
+    const result = await Tesseract.recognize(dataUrl, 'eng');
+    return result.data.text?.trim() || null;
+  } catch(e){ return null; }
+}
+
+// Format assistant response — converts markdown-like text to styled HTML
+function formatResponse(text, role){
+  if(!text) return '';
+  let html = text
+    // fenced code blocks ```lang\n...\n```
+    .replace(/```(\w*)\n?([\s\S]*?)```/g, (_,lang,code)=>`<pre><code>${code.replace(/</g,'&lt;')}</code></pre>`)
+    // inline `code`
+    .replace(/`([^`]+)`/g, '<code>$1</code>')
+    // **bold**
+    .replace(/\*\*(.+?)\*\*/g, '<strong>$1</strong>')
+    // step lines "Step 1:" or "1."
+    .replace(/^(Step\s*\d+[:.][^\n]*)/gm, '<div class="step">$1</div>')
+    // Formula lines starting with ▶ or →
+    .replace(/^[▶→]\s*(.+)$/gm, '<div class="formula">→ $1</div>')
+    // Final answer box
+    .replace(/^(Answer:|Final Answer:|Result:)\s*(.+)$/gim, '<div class="result-box">✓ $2</div>')
+    // line breaks
+    .replace(/\n/g,'<br>');
+  return html;
+}
+
+function afterAssistant(){
+  /* ======================================================
+     OMNISOLVE AI BRAIN
+     System prompt (your exact spec):
+     - General chat (Mistral)
+     - JEE Solver / Math / Coding / Knowledge / Image (Qwen)
+     Answer chain: Math → Ollama → PubChem → Wikipedia → DDG → Google link
+     Extra: Prompt Builder, Memory system
+     ====================================================== */
+
+  const SYSTEM_PROMPT = `You are OmniSolve AI, a friendly and powerful AI assistant.
+Your job is to ALWAYS answer the user's questions.
+You are:
+- A JEE Main and JEE Advanced expert tutor
+- A professional programmer
+- A science and general knowledge assistant
+- A friendly conversational companion
+
+IMPORTANT: Never only explain what you can do. Always provide the actual answer or solution.
+
+GENERAL CHAT: Talk naturally like a helpful friend. Reply normally, be friendly, keep conversation natural.
+
+GENERAL KNOWLEDGE: For factual questions give a clear answer, explain simply, add useful details.
+
+JEE SOLVER — When a student asks Physics, Chemistry, or Maths:
+1. Identify the topic.
+2. Explain the concept briefly.
+3. State the formula(s) used.
+4. Solve step-by-step showing all working.
+5. Verify the answer.
+6. State the final answer clearly (prefix with "Answer:").
+Physics: use concepts, laws, units, reasoning. Chemistry: explain reactions, concepts, calculations. Mathematics: show complete derivation.
+
+CODING — When asked for code:
+1. Understand the requirement.
+2. Give complete, working, runnable code.
+3. Explain how it works.
+4. Fix any errors if provided.
+Support: Python, Java, C, C++, JavaScript, TypeScript, React, Next.js, Node.js, SQL, HTML, CSS and all other languages. Always check syntax and logic before giving code.
+
+IMAGE QUESTIONS: If text extracted from an image is provided, read the question carefully, extract all details, solve it completely, and explain the answer.
+
+STYLE: Be friendly, clear, patient, helpful. Do not say "I cannot help" when you can answer. Give useful answers immediately.`;
+
+  const MODE_EXTRAS = {
+    general:   '',
+    jee:       '\n\nCurrent mode: JEE Solver. Act as an IIT professor. Always solve step-by-step with formulas, units and verification.',
+    coding:    '\n\nCurrent mode: Coding Lab. Always provide complete, working, explained code with syntax highlighting markers (```lang).',
+    math:      '\n\nCurrent mode: Math Solver. Always solve step-by-step showing every calculation. Box/prefix the final answer with "Answer:".',
+    knowledge: '\n\nCurrent mode: Knowledge. Give clear factual answers. Separate facts from opinions. Add useful context.',
+    image:     '\n\nCurrent mode: Image Solver. The user uploaded a question image. Read it carefully and solve it completely.',
+    prompt:    '',
+    memory:    '',
+  };
+  const MODE_MODELS = { general:'mistral', jee:'qwen2.5', coding:'qwen2.5', math:'qwen2.5', knowledge:'qwen2.5', image:'qwen2.5' };
+  const MODE_HINTS  = { general:'Ask anything — friendly & fast', jee:'Physics · Chemistry · Maths', coding:'Generate · Debug · Explain', math:'Algebra · Calculus · Equations', knowledge:'Science · History · Facts', image:'Upload photo — solve instantly', prompt:'Generate complete AI prompts', memory:'Your saved context & history' };
+  const MODE_TITLES = { general:'General Chat', jee:'JEE Solver', coding:'Coding Lab', math:'Math Solver', knowledge:'Knowledge', image:'Image Solver', prompt:'Prompt Builder', memory:'Memory' };
+  const MODE_PLACEHOLDERS = { general:'Ask me anything…', jee:'Type a JEE problem — Physics, Chemistry or Maths…', coding:'Paste code, describe a bug, or ask for a new feature…', math:'Type any math problem — e.g. solve x² - 5x + 6 = 0', knowledge:'Ask any factual question…', image:'Upload a photo using 📎 or describe what you see…' };
+  const MODE_SUGGESTIONS = {
+    general:   [['Casual','What is a fun science fact?'],['Explain','Why is the sky blue?'],['Advice','How do I stay focused while studying?'],['Concept','What is quantum entanglement?']],
+    jee:       [['Physics','A ball is thrown at 45° with 20 m/s. Find the range.'],['Chemistry','Find the molar mass of H₂SO₄.'],['Maths','Integrate ∫ x² sin(x) dx'],['Concept','Explain Newton\'s third law with examples.']],
+    coding:    [['Python','Write a function to find all prime numbers up to N'],['Debug','Fix: for i in range(5) print(i)'],['Web','Build a responsive navbar in HTML + CSS'],['Algorithm','Explain quicksort with code in C++']],
+    math:      [['Algebra','Solve 3x² − 5x + 2 = 0'],['Calculus','Find the derivative of x³ + sin(x)'],['Geometry','Area of a triangle with sides 3, 4, 5'],['Simplify','Simplify (x² − 4) / (x − 2)']],
+    knowledge: [['Science','How does photosynthesis work?'],['History','Who was the first person on the moon?'],['Geography','What is the largest country by area?'],['Tech','How does the internet work?']],
+    image:     [['Upload','Click 📎 to upload a photo of your question'],['OCR','I will read and solve any handwritten question'],['Any subject','Physics, Maths, Chemistry — all supported'],['Fast','Questions solved in seconds']],
+    prompt:    [['','Switch to the Prompt Builder panel on the left to get started.'],['','']],
+    memory:    [['','Switch to the Memory panel on the left.'],['','']],
+  };
+
+  let currentMode = 'general';
+  let history = [];
+  let pendingImages = [];
+  let isBusy = false;
+  let ollamaOK = null;
+
+  // ── Memory system ──
+  const MEM_KEY = 'omnisolve_memory_v1';
+  const MEM_INST_KEY = 'omnisolve_instructions_v1';
+  const MEM_ON_KEY = 'omnisolve_mem_enabled';
+  function memGet(){ try{ return JSON.parse(localStorage.getItem(MEM_KEY)||'[]'); } catch(e){ return []; } }
+  function memSave(arr){ try{ localStorage.setItem(MEM_KEY, JSON.stringify(arr.slice(-30))); } catch(e){} }
+  function memAdd(text){ if(!memEnabled()) return; const m = memGet(); m.push({text, time: new Date().toISOString()}); memSave(m); }
+  function memEnabled(){ return localStorage.getItem(MEM_ON_KEY) === '1'; }
+  function getInstructions(){ return localStorage.getItem(MEM_INST_KEY) || ''; }
+
+  // ── Ollama ──
+  // ── AI engine selector: Ollama local → Pollinations.ai cloud ──
+  // Pollinations.ai is 100% free, no API key needed, uses real AI models:
+  // openai (GPT-4o), qwen, deepseek, mistral — all available at zero cost.
+  const POLLINATIONS_URL = 'https://text.pollinations.ai/';
+  const POLL_MODEL_MAP = {
+    general:   'openai',      // GPT-4o for friendly chat
+    jee:       'qwen',        // Qwen for STEM / JEE reasoning
+    coding:    'qwen',        // Qwen for code generation & debug
+    math:      'qwen',        // Qwen for maths
+    knowledge: 'openai',      // GPT-4o for factual knowledge
+    image:     'openai',      // GPT-4o for image-extracted text
+  };
+
+  async function checkOllamaStatus(){
+    try{
+      const r = await fetch('http://localhost:11434/api/tags',{signal:AbortSignal.timeout(2500)});
+      if(r.ok){
+        ollamaOK=true;
+        document.getElementById('omniDot').className='sdot on';
+        document.getElementById('omniStatusTxt').textContent='Ollama AI — local & private';
+        return true;
+      }
+    } catch(e){}
+    ollamaOK=false;
+    // Stay green — Pollinations.ai cloud AI is our instant free fallback
+    document.getElementById('omniDot').className='sdot on';
+    document.getElementById('omniStatusTxt').textContent='Cloud AI ready (Pollinations)';
+    return false;
+  }
+
+  async function callOllama(text, mode, hist){
+    const model = MODE_MODELS[mode] || 'mistral';
+    const inst = getInstructions();
+    const sys = SYSTEM_PROMPT + (MODE_EXTRAS[mode]||'') + (inst ? '\n\nUser custom instructions: ' + inst : '');
+    const msgs = [{ role:'system', content: sys }];
+    hist.slice(-12).forEach(m=>{ msgs.push({ role: m.role==='user'?'user':'assistant', content: m.text||'' }); });
+    msgs.push({ role:'user', content: text });
+    const r = await fetch('http://localhost:11434/api/chat',{
+      method:'POST', headers:{'Content-Type':'application/json'},
+      signal: AbortSignal.timeout(90000),
+      body: JSON.stringify({ model, messages: msgs, stream: false })
+    });
+    if(!r.ok) throw new Error('Ollama '+r.status);
+    const d = await r.json();
+    return d.message?.content || d.response || '';
+  }
+
+  // ── Pollinations.ai — free cloud AI, no API key needed ──
+  // POST to https://text.pollinations.ai/ with OpenAI-compatible messages.
+  // Available models: openai (GPT-4o), qwen, deepseek, mistral, llama.
+  // No account, no key, truly free. Falls back to Wikipedia/DDG if rate-limited.
+  async function callPollinations(text, mode, hist){
+    const model = POLL_MODEL_MAP[mode] || 'openai';
+    const inst = getInstructions();
+    const sys = SYSTEM_PROMPT + (MODE_EXTRAS[mode]||'') + (inst ? '\n\nUser custom instructions: ' + inst : '');
+    const msgs = [{ role:'system', content: sys }];
+    hist.slice(-14).forEach(m=>{ msgs.push({ role: m.role==='user'?'user':'assistant', content: m.text||'' }); });
+    msgs.push({ role:'user', content: text });
+    const r = await fetch(POLLINATIONS_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      signal: AbortSignal.timeout(75000),
+      body: JSON.stringify({ messages: msgs, model, stream: false, seed: -1 })
+    });
+    if(!r.ok) throw new Error('Pollinations HTTP '+r.status);
+    const answer = await r.text();
+    if(!answer || answer.trim().length < 5) throw new Error('Empty Pollinations response');
+    return answer.trim();
+  }
+
+  // ── Use DeepSeek via Pollinations for hard multi-step reasoning ──
+  async function callDeepSeek(text, mode, hist){
+    const inst = getInstructions();
+    const sys = SYSTEM_PROMPT + (MODE_EXTRAS[mode]||'') + (inst ? '\n\nUser custom instructions: ' + inst : '')
+              + '\n\nYou are in deep reasoning mode. Work through this step-by-step carefully before answering.';
+    const msgs = [{ role:'system', content: sys }];
+    hist.slice(-6).forEach(m=>{ msgs.push({ role: m.role==='user'?'user':'assistant', content: m.text||'' }); });
+    msgs.push({ role:'user', content: text });
+    const r = await fetch(POLLINATIONS_URL, {
+      method:'POST',
+      headers:{ 'Content-Type':'application/json' },
+      signal: AbortSignal.timeout(120000),
+      body: JSON.stringify({ messages: msgs, model: 'deepseek', stream: false, seed: -1 })
+    });
+    if(!r.ok) throw new Error('DeepSeek HTTP '+r.status);
+    const answer = await r.text();
+    if(!answer || answer.trim().length < 5) throw new Error('Empty DeepSeek response');
+    return answer.trim();
+  }
+
+  // Detect when a question needs deep reasoning (JEE Advanced / complex proofs)
+  function needsDeepReasoning(text, mode){
+    if(!['jee','math','coding'].includes(mode)) return false;
+    return /(prove|derivation|advanced|jee adv|multi.?step|complex|difficult|hard problem|why does|explain why)/i.test(text)
+        || text.length > 200;
+  }
+
+  // ── Math engine (instant) ──
+  function isMathQ(q){
+    return /([0-9]\s*[\+\-\*\/\^]\s*[0-9])|(\b(solve|simplify|factor|derivative|differentiate|integrate|integral|calculate|expand)\b.*[a-z0-9])|([a-z]\s*\^\s*[0-9])|\b(sin|cos|tan|log|ln|sqrt|lim)\s*[\(\s]/i.test(q);
+  }
+  function localMath(raw){
+    const q = raw.trim();
+    try{
+      let m = q.match(/(?:derivative of|differentiate|d\/dx\s*\(?)\s*(.+?)[\)?]?\s*$/i);
+      if(m){ const r=math.derivative(m[1].trim(),'x').toString(); return `d/dx [${m[1].trim()}] = **${r}**`; }
+      m = q.match(/(?:integral of|integrate)\s+(.+?)(?:\s+dx|$)/i);
+      if(m && typeof nerdamer!=='undefined'){ const r=nerdamer.integrate(m[1].trim(),'x').toString(); return `∫ ${m[1].trim()} dx = **${r} + C**`; }
+      m = q.match(/(?:solve(?:\s+for\s+\w)?:?\s*)?(.+?)\s*=\s*(.+)/i);
+      if(m && /[a-z]/i.test(m[0]) && !/^(what|who|when|why|how|where|is|are)/i.test(q)){
+        const eq=`${m[1].trim()}=${m[2].trim()}`; const v=(m[1]+m[2]).match(/[a-z]/i)?.[0]||'x';
+        if(typeof nerdamer!=='undefined'){ const sols=nerdamer.solveEquations(eq,v); const list=Array.isArray(sols)?sols.map(s=>s.toString()):[sols.toString()]; return `Solving **${eq}** for **${v}**:\n\nAnswer: **${v} = ${list.join(' or ')}**`; }
+      }
+      m = q.match(/^(simplify|factor|expand)\s+(.+)/i);
+      if(m && typeof nerdamer!=='undefined'){ const op=m[1].toLowerCase(); const expr=m[2].trim(); const r=op==='factor'?nerdamer(expr).factor().toString():op==='expand'?nerdamer(expr).expand().toString():math.simplify(expr).toString(); return `${op}(${expr}) = **${r}**`; }
+      const cleaned = q.replace(/^(what is|calculate|compute|evaluate|find)\s+/i,'').replace(/\?$/,'').trim();
+      const result = math.evaluate(cleaned);
+      if(result!==undefined && typeof result!=='function'){ return `**${cleaned}** = **${math.format(result,{precision:10})}**`; }
+    } catch(e){
+      try{ if(typeof nerdamer!=='undefined'){ const c=q.replace(/^(what is|calculate)\s+/i,'').replace(/\?$/,'').trim(); return `**${c}** = **${nerdamer(c).evaluate().toString()}**`; } } catch(e2){}
+    }
+    return null;
+  }
+
+  // ── PubChem ──
+  async function chemLookup(q){
+    const m=q.match(/\b(?:molar mass|molecular weight|formula|structure)\s+(?:of\s+)?([a-z][a-z0-9\s]{1,40})/i);
+    if(!m) return null;
+    try{
+      const r=await fetch(`https://pubchem.ncbi.nlm.nih.gov/rest/pug/compound/name/${encodeURIComponent(m[1].trim())}/property/MolecularFormula,MolecularWeight,IUPACName/JSON`);
+      if(!r.ok) return null;
+      const d=await r.json(); const p=d?.PropertyTable?.Properties?.[0];
+      if(!p) return null;
+      return { text:`**${m[1].trim()}**\n\n- Formula: **${p.MolecularFormula}**\n- Molar mass: **${p.MolecularWeight} g/mol**${p.IUPACName?'\n- IUPAC name: '+p.IUPACName:''}`, link:`https://pubchem.ncbi.nlm.nih.gov/#query=${encodeURIComponent(m[1].trim())}` };
+    } catch(e){ return null; }
+  }
+
+  // ── Wikipedia ──
+  async function wikiLookup(q){
+    const term=q.replace(/^(what is|what are|who is|who was|explain|define|describe)\s+/i,'').replace(/\?+$/,'').trim();
+    try{
+      const sr=await fetch(`https://en.wikipedia.org/w/api.php?action=opensearch&limit=1&namespace=0&format=json&search=${encodeURIComponent(term)}`);
+      if(!sr.ok) return null;
+      const [,titles]=await sr.json();
+      if(!titles?.length) return null;
+      const pr=await fetch(`https://en.wikipedia.org/api/rest_v1/page/summary/${encodeURIComponent(titles[0])}`);
+      if(!pr.ok) return null;
+      const d=await pr.json();
+      if(!d.extract) return null;
+      const sents=(d.extract.match(/[^.!?]+[.!?]+/g)||[]).slice(0,4).join(' ');
+      return { text:sents, link:d.content_urls?.desktop?.page };
+    } catch(e){ return null; }
+  }
+
+  // ── DuckDuckGo ──
+  async function ddgLookup(q){
+    try{
+      const r=await fetch(`https://api.duckduckgo.com/?format=json&no_html=1&skip_disambig=1&q=${encodeURIComponent(q)}`);
+      if(!r.ok) return null;
+      const d=await r.json();
+      const text=d.AbstractText||d.Answer||d.RelatedTopics?.[0]?.Text;
+      if(!text) return null;
+      return { text, link:d.AbstractURL||null };
+    } catch(e){ return null; }
+  }
+
+  // ── Format AI response ──
+  function formatAI(text){
+    let o=text;
+    o=o.replace(/```(\w*)\n?([\s\S]*?)```/g,(_,lang,code)=>`<pre><code>${code.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;')}</code></pre>`);
+    o=o.replace(/`([^`\n]+)`/g,'<code>$1</code>');
+    o=o.replace(/\*\*(.+?)\*\*/g,'<strong>$1</strong>');
+    o=o.replace(/\*([^*\n]+)\*/g,'<em>$1</em>');
+    o=o.replace(/(Step\s*\d+[:.][^\n<]*)/g,'<div class="step">$1</div>');
+    o=o.replace(/^(Answer:|Final Answer:|Result:|∴[^\n]*)/gim,'<div class="ans">$1</div>');
+    o=o.replace(/^### (.+)$/gm,'<h3>$1</h3>');
+    o=o.replace(/^## (.+)$/gm,'<h3>$1</h3>');
+    o=o.replace(/^[•\-\*] (.+)$/gm,'<li>$1</li>');
+    o=o.replace(/(<li>[\s\S]*?<\/li>)/g,m=>'<ul>'+m+'</ul>');
+    o=o.replace(/<\/ul>\s*<ul>/g,'');
+    o=o.replace(/\n/g,'<br>');
+    o=o.replace(/<br>\s*(<\/(div|ul|ol|pre|h3)>)/g,'$1');
+    o=o.replace(/(<(div|ul|pre|h3)[^>]*>)\s*<br>/g,'$1');
+    return o;
+  }
+
+  // ── Render chat ──
+  function renderChat(){
+    const win=document.getElementById('omniChat');
+    if(!win) return;
+    win.innerHTML=history.map(m=>{
+      const isUser=m.role==='user';
+      const imgs=(m.images||[]).map(s=>`<img src="${s}" style="max-width:100%;border-radius:9px;display:block;margin-bottom:8px;">`).join('');
+      const modeTag=(!isUser&&m.mode&&m.mode!=='general')?`<div class="os-mode-tag">${{jee:'🎓 JEE',coding:'💻 Code',math:'🔢 Math',knowledge:'📚 Knowledge',image:'🖼️ Image'}[m.mode]||''}</div><br>`:'';
+      const body=isUser?`<span>${(m.text||'').replace(/</g,'&lt;')}</span>`:`${modeTag}${formatAI(m.text||'')}`;
+      const link=m.link?`<a class="os-source" href="${m.link}" target="_blank" rel="noopener">🔗 View source</a>`:'';
+      const t=m.time||'';
+      if(isUser) return `<div class="os-msg user"><div class="os-bubble">${imgs}${body}</div><div class="os-time">${t}</div></div>`;
+      return `<div class="os-msg ai"><div class="os-avatar">🧠</div><div class="os-bubble">${imgs}${body}${link}</div><div class="os-time">${t}</div></div>`;
+    }).join('');
+    win.scrollTop=win.scrollHeight;
+  }
+
+  function timeNow(){ return new Date().toLocaleTimeString([],{hour:'2-digit',minute:'2-digit'}); }
+
+  function showTyping(label){
+    const win=document.getElementById('omniChat');
+    if(!win) return;
+    win.insertAdjacentHTML('beforeend',`<div class="os-msg ai" id="osTyping"><div class="os-avatar">🧠</div><div class="os-bubble os-typing"><span style="font-size:12px;color:var(--text-faint);margin-right:6px;">${label}</span><div class="os-dot"></div><div class="os-dot"></div><div class="os-dot"></div></div></div>`);
+    win.scrollTop=win.scrollHeight;
+  }
+  function removeTyping(){ document.getElementById('osTyping')?.remove(); }
+
+  // ── Suggestions ──
+  function renderSuggestions(){
+    const grid=document.getElementById('omniSuggestions');
+    if(!grid) return;
+    const list=MODE_SUGGESTIONS[currentMode]||[];
+    grid.innerHTML=list.filter(([cat])=>cat).map(([cat,text])=>`<button class="ow-card" onclick="omniQuickSend(${JSON.stringify(text)})"><strong>${cat}</strong>${text}</button>`).join('');
+  }
+  window.omniQuickSend=function(text){ document.getElementById('omniTextInput').value=text; omniSend(); };
+
+  // ── Mode switching ──
+  function switchMode(mode){
+    currentMode=mode;
+    document.querySelectorAll('.os-mode').forEach(b=>b.classList.toggle('active', b.dataset.mode===mode));
+    document.getElementById('omniModeTitle').textContent=MODE_TITLES[mode]||mode;
+    document.getElementById('omniModeHint').textContent=MODE_HINTS[mode]||'';
+    const ti=document.getElementById('omniTextInput');
+    if(ti) ti.placeholder=MODE_PLACEHOLDERS[mode]||'Ask anything…';
+    const isChat = !['prompt','memory'].includes(mode);
+    document.getElementById('omniPromptPanel').style.display=mode==='prompt'?'flex':'none';
+    document.getElementById('omniMemPanel').style.display=mode==='memory'?'flex':'none';
+    document.getElementById('omniInputBar').style.display=isChat?'block':'none';
+    if(isChat){
+      // Reset to welcome if switching to new chat mode
+      history=[];
+      document.getElementById('omniChat').style.display='none';
+      document.getElementById('omniWelcome').style.display='flex';
+      renderSuggestions();
+    } else {
+      document.getElementById('omniChat').style.display='none';
+      document.getElementById('omniWelcome').style.display='none';
+    }
+    // Mobile: close sidebar
+    document.getElementById('omniSidebar').classList.remove('open');
+  }
+
+  document.querySelectorAll('.os-mode').forEach(btn=>{
+    btn.addEventListener('click',()=>switchMode(btn.dataset.mode));
+  });
+
+  // ── Image handling ──
+  function renderImagePreviews(){
+    const row=document.getElementById('omniImgPreview');
+    if(!row) return;
+    row.innerHTML=pendingImages.map((img,i)=>`<div class="omni-thumb"><img src="${img.dataUrl}" alt=""><button onclick="omniRemoveImg(${i})">✕</button></div>`).join('');
+    row.style.display=pendingImages.length?'flex':'none';
+  }
+  window.omniRemoveImg=function(i){ pendingImages.splice(i,1); renderImagePreviews(); };
+  document.getElementById('omniFileInput').addEventListener('change',e=>{
+    [...e.target.files].forEach(f=>{
+      if(!f.type.startsWith('image/')) return;
+      const r=new FileReader();
+      r.onload=ev=>{ pendingImages.push({dataUrl:ev.target.result,name:f.name}); renderImagePreviews(); };
+      r.readAsDataURL(f);
+    });
+    e.target.value='';
+  });
+
+  // ── Auto-resize textarea ──
+  const ti=document.getElementById('omniTextInput');
+  ti.addEventListener('input',()=>{ ti.style.height='22px'; ti.style.height=Math.min(ti.scrollHeight,130)+'px'; });
+  ti.addEventListener('keydown',e=>{ if(e.key==='Enter'&&!e.shiftKey){ e.preventDefault(); omniSend(); } });
+  document.getElementById('omniSendBtn').addEventListener('click', omniSend);
+
+  // ── OCR ──
+  async function doOCR(dataUrl){
+    if(typeof Tesseract==='undefined') return null;
+    try{ const r=await Tesseract.recognize(dataUrl,'eng',{logger:()=>{}}); return r.data.text?.trim()||null; } catch(e){ return null; }
+  }
+
+  // ── Main send ──
+  async function omniSend(){
+    if(isBusy) return;
+    const input=document.getElementById('omniTextInput');
+    let text=input.value.trim();
+    const imgs=[...pendingImages];
+    if(!text && imgs.length===0) return;
+
+    document.getElementById('omniWelcome').style.display='none';
+    document.getElementById('omniChat').style.display='flex';
+    isBusy=true; input.value=''; ti.style.height='22px';
+    pendingImages=[]; renderImagePreviews();
+    document.getElementById('omniSendBtn').disabled=true;
+    const mode=currentMode;
+
+    // OCR if image only
+    if(imgs.length && !text){
+      history.push({role:'user',text:'📷 Reading image…',images:imgs.map(i=>i.dataUrl),time:timeNow()});
+      renderChat(); showTyping('Reading image with OCR…');
+      const extracted=await doOCR(imgs[0].dataUrl);
+      removeTyping();
+      if(extracted && extracted.length>4){ text=extracted; history[history.length-1].text=`📷 From image:\n${extracted}`; renderChat(); }
+      else { history.push({role:'ai',text:"I could see the image but couldn't read the text clearly. Please type the question.",time:timeNow()}); renderChat(); isBusy=false; document.getElementById('omniSendBtn').disabled=false; return; }
+    } else {
+      history.push({role:'user',text,images:imgs.map(i=>i.dataUrl),time:timeNow()});
+      renderChat();
+    }
+
+    const typingLabels={general:'AI thinking…',jee:'JEE Professor solving…',coding:'Engineer writing code…',math:'Computing step by step…',knowledge:'Researching answer…',image:'Reading image question…'};
+    showTyping(typingLabels[mode]||'Thinking…');
+    let reply=null, link=null;
+
+    try{
+      // ① Instant exact math — zero latency, 100% accurate
+      if(isMathQ(text) && ['math','jee','general'].includes(mode)){
+        const mr=localMath(text);
+        if(mr){ removeTyping(); reply=mr; }
+      }
+
+      // ② Ollama local AI (if installed and running — fastest, fully private)
+      if(!reply){
+        if(ollamaOK===null) await checkOllamaStatus();
+        if(ollamaOK){
+          try{
+            removeTyping(); showTyping('Ollama AI thinking…');
+            reply=await callOllama(text,mode,history.slice(0,-1));
+          } catch(e){ ollamaOK=false; document.getElementById('omniDot').className='sdot on'; document.getElementById('omniStatusTxt').textContent='Cloud AI ready (Pollinations)'; }
+        }
+      }
+
+      // ③ DeepSeek (for hard JEE / complex multi-step reasoning) via Pollinations
+      if(!reply && needsDeepReasoning(text,mode)){
+        try{
+          removeTyping(); showTyping('Deep reasoning (DeepSeek)…');
+          reply=await callDeepSeek(text,mode,history.slice(0,-1));
+        } catch(e){}
+      }
+
+      // ④ Pollinations.ai cloud AI — GPT-4o / Qwen / Mistral, free, no key
+      if(!reply){
+        try{
+          removeTyping(); showTyping('AI solving your question…');
+          reply=await callPollinations(text,mode,history.slice(0,-1));
+        } catch(e){}
+      }
+
+      // ⑤ PubChem — exact chemistry data (molar mass, formula, IUPAC)
+      if(!reply && ['jee','knowledge','general'].includes(mode)){
+        const c=await chemLookup(text); if(c){ removeTyping(); reply=c.text; link=c.link; }
+      }
+
+      // ⑥ Wikipedia — factual knowledge fallback
+      if(!reply){ const w=await wikiLookup(text); if(w){ removeTyping(); reply=w.text; link=w.link; } }
+
+      // ⑦ DuckDuckGo — instant answers fallback
+      if(!reply){ const d=await ddgLookup(text); if(d){ removeTyping(); reply=d.text; link=d.link; } }
+
+      // ⑧ Google search link — absolute last resort
+      if(!reply){ removeTyping(); reply="I couldn't produce a confident answer right now. Please try rephrasing, or tap the source link to search Google."; link=`https://www.google.com/search?q=${encodeURIComponent(text)}`; }
+    } catch(err){
+      removeTyping(); reply="Something went wrong — please try again in a moment."; link=`https://www.google.com/search?q=${encodeURIComponent(text)}`;
+    }
+
+    removeTyping();
+    history.push({role:'ai',text:reply,link,mode,time:timeNow()});
+    // Auto-save to memory
+    if(memEnabled() && text.length > 20) memAdd(text);
+    renderChat();
+    isBusy=false; document.getElementById('omniSendBtn').disabled=false;
+    document.getElementById('omniTextInput').focus();
+  }
+
+  // ── Prompt Builder ──
+  document.getElementById('pbGenBtn').addEventListener('click', async ()=>{
+    const idea=document.getElementById('pbIdea').value.trim();
+    if(!idea){ alert('Please describe what you want to create.'); return; }
+    const audience=document.getElementById('pbAudience').value.trim();
+    const style=document.querySelector('input[name="pbStyle"]:checked')?.value||'detailed';
+    const pbResult=document.getElementById('pbResult');
+    const pbCopyBtn=document.getElementById('pbCopyBtn');
+    document.getElementById('pbGenBtn').textContent='Generating…';
+    document.getElementById('pbGenBtn').disabled=true;
+    pbResult.style.display='none'; pbCopyBtn.style.display='none';
+
+    const promptRequest=`Generate a complete, ready-to-use AI prompt for the following:\n\nGoal: ${idea}\n${audience?'Audience: '+audience+'\n':''}Style: ${style}\n\nThe prompt should include: clear instructions, requirements, features, technical specifications if needed, and expected output format. Make it comprehensive and immediately usable.`;
+
+    let result='';
+    if(ollamaOK===null) await checkOllamaStatus();
+    if(ollamaOK){
+      try{ result=await callOllama(promptRequest,'general',[]); }
+      catch(e){ result=''; }
+    }
+    if(!result){
+      try{ result=await callPollinations(promptRequest,'general',[]); } catch(e){ result=''; }
+    }
+    if(!result){
+      // Fallback: generate a structured prompt template
+      result=`# AI Prompt: ${idea}\n\n## Goal\n${idea}\n\n## Instructions\nYou are an expert assistant. Your task is to help with: ${idea}.\n\n${audience?`## Target Audience\n${audience}\n\n`:''  }## Requirements\n- Provide accurate, detailed, and helpful responses\n- Break down complex tasks into clear steps\n- Use examples where appropriate\n- Ask clarifying questions if needed\n\n## Output Format\n- Use clear headings for different sections\n- Include code examples if technical\n- Provide step-by-step instructions\n- End with a summary or next steps\n\n## Context\nUser Goal: ${idea}\nStyle: ${style === 'technical' ? 'Technical and precise' : style === 'concise' ? 'Brief and to the point' : 'Detailed and comprehensive'}`;
+    }
+    pbResult.style.display='block';
+    pbResult.textContent=result;
+    pbCopyBtn.style.display='inline-block';
+    document.getElementById('pbGenBtn').textContent='Generate Prompt ✨';
+    document.getElementById('pbGenBtn').disabled=false;
+    pbCopyBtn.onclick=()=>{ navigator.clipboard.writeText(result).then(()=>{ pbCopyBtn.textContent='Copied!'; setTimeout(()=>pbCopyBtn.textContent='Copy Prompt',2000); }); };
+  });
+
+  // ── Memory panel ──
+  function renderMemList(){
+    const list=memGet();
+    const el=document.getElementById('memList');
+    if(!el) return;
+    if(!list.length){ el.innerHTML='<div style="color:var(--text-faint);font-size:13px;">No memories saved yet.</div>'; return; }
+    el.innerHTML=list.map((m,i)=>`<div class="mem-entry">
+      <span>💬 ${m.text.slice(0,90)}${m.text.length>90?'…':''}</span>
+      <button class="mem-del" onclick="omniDelMem(${i})">✕</button>
+    </div>`).join('');
+  }
+  window.omniDelMem=function(i){ const m=memGet(); m.splice(i,1); memSave(m); renderMemList(); };
+
+  const memToggle=document.getElementById('memToggle');
+  if(memToggle){
+    memToggle.checked=memEnabled();
+    memToggle.addEventListener('change',()=>{ localStorage.setItem(MEM_ON_KEY,memToggle.checked?'1':'0'); });
+  }
+  const memSaveBtn=document.getElementById('memSaveBtn');
+  if(memSaveBtn){
+    const inst=document.getElementById('memInstructions');
+    if(inst) inst.value=getInstructions();
+    memSaveBtn.addEventListener('click',()=>{
+      const v=document.getElementById('memInstructions')?.value||'';
+      localStorage.setItem(MEM_INST_KEY,v);
+      memSaveBtn.textContent='Saved ✓'; setTimeout(()=>memSaveBtn.textContent='Save Instructions',2000);
+    });
+  }
+  document.getElementById('memClearBtn')?.addEventListener('click',()=>{ memSave([]); renderMemList(); });
+  renderMemList();
+
+  // ── Init ──
+  checkOllamaStatus();
+  renderSuggestions();
+}
+
+const ROUTES = {
+  '/': { render: pageHome, after: afterHome, navKey:'/' },
+  '/assistant': { render: pageAssistant, after: afterAssistant, navKey:'/assistant' },
+  '/directory': { render: pageDirectory, after: afterDirectory, navKey:'/directory' },
+  '/tool': { render: pageTool, after: afterTool, navKey:'' },
+  '/compare': { render: pageCompare, after: afterCompare, navKey:'/compare' },
+  '/category': { render: pageCategory, after: afterCategory, navKey:'' },
+  '/favorites': { render: pageFavorites, after: afterFavorites, navKey:'' },
+  '/premium': { render: pagePremium, after: afterPremium, navKey:'/premium' },
+  '/login': { render: pageLogin, after: afterLogin, navKey:'' },
+  '/account': { render: pageAccount, after: afterAccount, navKey:'' },
+  '/admin': { render: pageAdmin, after: afterAdmin, navKey:'' },
+};
+
+function parseHash(){
+  let h = location.hash || '#/';
+  h = h.slice(1); // remove '#'
+  const [path, queryStr] = h.split('?');
+  return { path: path || '/', qp: new URLSearchParams(queryStr||'') };
+}
+
+function render(){
+  const { path, qp } = parseHash();
+  const route = ROUTES[path] || ROUTES['/'];
+  document.getElementById('navMount').innerHTML = navHTML(route.navKey);
+  document.getElementById('footMount').innerHTML = footerHTML();
+  document.getElementById('app').innerHTML = route.render(qp);
+  renderAccountSlot();
+  document.getElementById('burgerBtn')?.addEventListener('click', ()=>document.getElementById('drawer').classList.add('open'));
+  document.getElementById('drawerClose')?.addEventListener('click', ()=>document.getElementById('drawer').classList.remove('open'));
+  document.querySelectorAll('.mobile-drawer a').forEach(a=>a.addEventListener('click', ()=>document.getElementById('drawer').classList.remove('open')));
+  route.after(qp);
+  window.scrollTo(0,0);
+}
+
+window.addEventListener('hashchange', render);
+document.addEventListener('DOMContentLoaded', ()=>{ Theme.init(); render(); });
+</script>
+</body>
+</html>
